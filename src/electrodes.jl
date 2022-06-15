@@ -26,37 +26,59 @@ struct Electrode
   position :: Tuple{Float64,Float64}
 end #struct
 
-tenpctDeg = 0.1*180
+@enum Laterality left right midline
 
-twenpctDeg = 0.2 * 180
+function whichSide(etrode ::Electrode)
+  if etrode.position[0] < 0.0
+    left
+  elseif etrode.position[0] > 0.0
+    right
+  else
+    midline
+  end #if
+end #func
 
-ifcn_electrodes = 
+const tenpctDeg = 0.1*180
+
+const tenUp = 90-tenpctDeg
+
+const twenpctDeg = 0.2 * 180
+
+const twenDown = 0+twenpctDeg
+
+# circle defined by Fp1, C3, O1 will mark F3 and P3
+# also subject to the constraint that circles defined by F7, Fz, F8 and P7, Pz,
+# P8 will mark F3,F4 and P3,P4
+
+const ifcn_electrodes = 
   Dict(
-       "Cz" => (0,0),
-       "Nz" => (+90,0),
-       "In" => (+90,+180),
-       "T9" => (+90,-90),
-       "T10" => (+90,+90),
-       "Fpz" => (90-tenpctDeg,0),
-       "Fz" => (0+twenpctDeg, 0),
-       "Pz" => (0+twenpctDeg, +180),
-       "Oz" => (90-tenpctDeg, +180),
-       "T7" => (90-tenpctDeg, -90),
-       "T8" => (90-tenpctDeg, +90),
-       "C3" => (0+twenpctDeg, -90),
-       "C4" => (0+twenpctDeg, +90),
-       "Fp1" => (0,0)
-       "Fp2"=> (0,0)
-       "F7"=> (0,0)
-       "F8"=> (0,0)
-       "F3"=> (0,0)
-       "F4"=> (0,0)
-       "P3"=> (0,0)
-       "P4"=> (0,0)
-       "O1"=> (0,0)
-       "O2"=> (0,0)
+       "Cz" =>  (0,		0),
+       "Nz" =>  (+90,		0),
+       "In" =>  (+90,		+180),
+       "T9" =>  (+90,		-90),
+       "T10" => (+90,		+90),
+       "Fpz" => (tenUp,		0),
+       "Fz" =>  (twenDown,	0),
+       "Pz" =>  (twenDown,	+180),
+       "Oz" =>  (tenUp,		+180),
+       "T7" =>  (tenUp,		-90),
+       "T8" =>  (tenUp,		+90),
+       "C3" =>  (twenDown,	-90),
+       "C4" =>  (twenDown,	+90),
+       "Fp1" => (tenUp,		-tenpctDeg),
+       "Fp2" => (tenUp,		+tenpctDeg),
+       "F7" =>  (tenUp,		-90 + twenpctDeg),
+       "F8" =>  (tenUp,		+90 - twenpctDeg),
+       "F3" =>  (0,		0),
+       "F4" =>  (0,		0),
+       "P3" =>  (0,		0),
+       "P4" =>  (0,		0),
+       "P7" =>  (tenUp,         -90 - twenpctDeg)
+       "P8" =>  (tenUp,         +90 + twenpctDeg)
+       "O1" =>  (tenUp,		-180 + tenpctDeg),
+       "O2" =>  (tenUp,		+180 - tenpctDeg),
        
-      )
+      ),
 
                 
 
