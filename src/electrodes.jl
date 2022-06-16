@@ -46,6 +46,10 @@ const twenpctDeg = 0.2 * 180
 
 const twenDown = 0+twenpctDeg
 
+const threefourth = 47.7
+
+const threefourphi = 38.36
+
 # circle defined by Fp1, C3, O1 will mark F3 and P3
 # also subject to the constraint that circles defined by F7, Fz, F8 and P7, Pz,
 # P8 will mark F3,F4 and P3,P4
@@ -69,10 +73,10 @@ const ifcn_electrodes =
        "Fp2" => (tenUp,		+tenpctDeg),
        "F7" =>  (tenUp,		-90 + twenpctDeg),
        "F8" =>  (tenUp,		+90 - twenpctDeg),
-       "F3" =>  (0,		0),
-       "F4" =>  (0,		0),
-       "P3" =>  (0,		0),
-       "P4" =>  (0,		0),
+       "F3" =>  (threefourth,	-threefourphi),
+       "F4" =>  (threefourth,	+threefourphi),
+       "P3" =>  (threefourth,	-180+threefourphi),
+       "P4" =>  (threefourth,	+180-threefourphi),
        "P7" =>  (tenUp,         -90 - twenpctDeg)
        "P8" =>  (tenUp,         +90 + twenpctDeg)
        "O1" =>  (tenUp,		-180 + tenpctDeg),
