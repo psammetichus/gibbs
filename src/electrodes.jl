@@ -46,9 +46,13 @@ const twenpctDeg = 0.2 * 180
 
 const twenDown = 0+twenpctDeg
 
-const threefourth = 47.7
+# these are derived as the intersections between the circles F7-Fz-F8 and
+# Fp1-C3-O1 (and analogously on the right and in the parietal) since the two
+# definitions from the IFCN recommendations are not the same point
+const threefourth = 49.52
 
-const threefourphi = 38.36
+const threefourphi = 40.48
+
 
 # circle defined by Fp1, C3, O1 will mark F3 and P3
 # also subject to the constraint that circles defined by F7, Fz, F8 and P7, Pz,
