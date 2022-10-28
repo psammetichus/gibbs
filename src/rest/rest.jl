@@ -1,10 +1,24 @@
 import LinearAlgebra
 using Statistics
+using CSV
 
 # data is the EEG potentials with average reference, chan x samples
 # G is the lead field matrix, sources x channels
 
 const RMat = Array{Float64, 2}
+
+function loadDipoles(filename :: String) :: RMat
+  dataFile = File(filename)
+  buffer = zeros( (3000, 3))
+  rowN = 1
+  for row in dataFile
+    buffer[rowN] = [ row[:col1], row[:col2], row[:col3] ]
+    rowN += 1
+  end
+
+  return buffer
+end
+		
 
 function rest_refer(data :: Rmat, G :: Rmat) :: Rmat
 
@@ -29,3 +43,5 @@ function calcLeadField(xyzElec, xyzDipoles, xyzDipOri, headmodel)
 
 
 end
+
+
