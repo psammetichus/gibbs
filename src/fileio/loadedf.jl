@@ -1,7 +1,7 @@
 module LoadEdf
 
 import EDFPlus
-import JD
+import JLD
 
 function loadEEG(filename :: String)
     edfh = EDF.loadFile(filename)
@@ -29,6 +29,11 @@ const trodereplacements = Dict(
     "T6" => "P8"
 )
 
+struct EEG
+    signals :: Dict{String, Vector{Float64}}
+    Fs :: Float64
+    #annots :: Vector{EDFPlus.Annotation}
+end #EEG struct
 
 function fixname!(signame :: String)
     stripped = strip(signame)
@@ -38,12 +43,6 @@ end #fixname!
 function saveAsJLD(filename :: String, eeg :: EEG)
     JLD.save(filename, "eeg", eeg)
 end #saveAsJLD
-
-struct EEG
-    signals :: Dict{String, vector{Float64}}
-    Fs :: Float64
-    #annots :: Vector{EDFPlus.Annotation}
-end #EEG struct
 
 
 end #module
