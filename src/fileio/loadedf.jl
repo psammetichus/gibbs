@@ -3,16 +3,6 @@ module LoadEdf
 import EDFPlus
 import JD
 
-function loadEEG(filename :: String)
-    edfh = EDF.loadFile(filename)
-    fixnames!(edfh)
-    signals = Dict([fixname!(edfh.signalparam[i].label) => EDFPlus.physicalchanneldata(edfh,i) for i in 1:30])
-    annots = edfh.annotations
-    Fs = EDFPlus.samplerate(edfh, 2) # assumption that the sampling rate is the same on all channels; avoid channel 1 in case annotation
-    myEEG = EEG(signals, Fs)
-    EDFPlus.closefile!(edfh)
-    return myEEG
-end #loadEEG
 
 const trodereplacements = Dict(
     "T3" => "T7"
@@ -30,10 +20,29 @@ const trodereplacements = Dict(
 )
 
 
+struct EEG
+    signals :: Dict{String, Vector{Float64}}
+    Fs :: Float64
+    #annots :: Vector{EDFPlus.Annotation}
+end #EEG struct
+
+
 function fixname!(signame :: String)
     stripped = strip(signame)
     return get(trodereplacements, stripped, stripped)
 end #fixname!
+
+
+function loadEEG(filename :: String)
+    edfh = EDFPlus.loadfile(filename)
+    signals = Dict([fixname!(edfh.signalparam[i].label) => EDFPlus.physicalchanneldata(edfh,i) for i in 1:30])
+    annots = edfh.annotations
+    Fs = EDFPlus.samplerate(edfh, 2) # assumption that the sampling rate is the same on all channels; avoid channel 1 in case annotation
+    myEEG = EEG(signals, Fs)
+    EDFPlus.closefile!(edfh)
+    return myEEG
+end #loadEEG
+
 
 function saveAsJLD(filename :: String, eeg :: EEG)
     JLD.save(filename, "eeg", eeg)
