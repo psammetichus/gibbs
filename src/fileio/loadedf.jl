@@ -1,21 +1,21 @@
 module LoadEdf
 
 import EDFPlus
-import JD
+import JLD
 
 
 const trodereplacements = Dict(
-    "T3" => "T7"
-    "T4" => "T8"
-    "A1" => "T9"
-    "A2" => "T10"
-    "T1" => "F9"
-    "T2" => "F10"
-    "L-EKG" => "ECGL"
-    "R-EKG" => "ECGR"
-    "R-EYE" => "EOGR"
-    "L-EYE" => "EOGL"
-    "T5" => "P7"
+    "T3" => "T7",
+    "T4" => "T8",
+    "A1" => "T9",
+    "A2" => "T10",
+    "T1" => "F9",
+    "T2" => "F10",
+    "L-EKG" => "ECGL",
+    "R-EKG" => "ECGR",
+    "R-EYE" => "EOGR",
+    "L-EYE" => "EOGL",
+    "T5" => "P7",
     "T6" => "P8"
 )
 
@@ -48,11 +48,19 @@ function saveAsJLD(filename :: String, eeg :: EEG)
     JLD.save(filename, "eeg", eeg)
 end #saveAsJLD
 
-struct EEG
-    signals :: Dict{String, vector{Float64}}
-    Fs :: Float64
-    #annots :: Vector{EDFPlus.Annotation}
-end #EEG struct
 
+function convertDirectory!()
+    for ef in filter(x->splitext(x)[2] == ".edf", readdir())
+        f,ext = splitext(ef)
+        if isfile(f * ".jld")
+            continue
+        end #if
+
+        println("Converting $ef...")
+        saveAsJLD(f*".jld", loadEEG(ef))
+        println("...converted $ef")
+
+    end #for
+end #convertDirectory!
 
 end #module
