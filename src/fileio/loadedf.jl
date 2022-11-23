@@ -15,17 +15,17 @@ function loadEEG(filename :: String)
 end #loadEEG
 
 const trodereplacements = Dict(
-    "T3" => "T7"
-    "T4" => "T8"
-    "A1" => "T9"
-    "A2" => "T10"
-    "T1" => "F9"
-    "T2" => "F10"
-    "L-EKG" => "ECGL"
-    "R-EKG" => "ECGR"
-    "R-EYE" => "EOGR"
-    "L-EYE" => "EOGL"
-    "T5" => "P7"
+    "T3" => "T7",
+    "T4" => "T8",
+    "A1" => "T9",
+    "A2" => "T10",
+    "T1" => "F9",
+    "T2" => "F10",
+    "L-EKG" => "ECGL",
+    "R-EKG" => "ECGR",
+    "R-EYE" => "EOGR",
+    "L-EYE" => "EOGL",
+    "T5" => "P7",
     "T6" => "P8"
 )
 
