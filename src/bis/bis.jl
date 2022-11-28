@@ -8,20 +8,20 @@ using DSP
 using FFTW
 using Basics
 
-function linearbis(which :: String, bsrCoeff, sefCoeff, rbrCoeff, emgCoeff)
-    if which == "green"
+function linearbis(which :: Symbol, bsrCoeff, sefCoeff, rbrCoeff, emgCoeff)
+    if which == :green
         -0.42bsrCoeff + 42.1
     end 
-    if which == "orange"
+    if which == :orange
         -0.42bsrCoeff + 0.91sefCoeff + 3.06rbrCoeff + 0.04emgCoeff + 29.9
     end
-    if which == "green"
+    if which == :green
         -3.01bsrCoeff + 3.84sefCoeff - 8.70rbrCoeff + 0.96emgCoeff - 57.6
     end
-    if which == "blue"
+    if which == :blue
         -1.43bsrCoeff + 2.55sefCoeff + 4.26rbrCoeff + 0.41emgCoeff + 5.3
     end
-    if which == "purple"
+    if which == :purple
         -1.97bsrCoeff + 0.88sefCoeff + 7.89rbrCoeff - 0.07emgCoeff + 65.2
     end
 end
@@ -61,7 +61,7 @@ end #bispectrum
 function bis(sig :: Signal)
     BSR = bsr(sig)
     if BSR > 0.498
-        return linearbis("green", BSR, 0.0, 0.0, 0.0)
+        return linearbis(:green, BSR, 0.0, 0.0, 0.0)
     end
     
     EMG = emg(sig)
@@ -69,15 +69,15 @@ function bis(sig :: Signal)
     RBR = rbr(sig)
     if EMG < 34.2 && SEF < 20.2
         if BSR > 0.021 || SEF < 14.8
-            return linearbis("orange", BSR, SEF, RBR, EMG)
+            return linearbis(:orange, BSR, SEF, RBR, EMG)
         else
-            return linearbis("green", BSR, SEF, RBR, EMG)
+            return linearbis(:green, BSR, SEF, RBR, EMG)
         end
     else
         if RBR < -0.7
-            return linearbis("blue", BSR, SEF, RBR, EMG)
+            return linearbis(:blue, BSR, SEF, RBR, EMG)
         else
-            return linearbis("purple", BSR, SEF, RBR, EMG)
+            return linearbis(:purple, BSR, SEF, RBR, EMG)
         end
     end
 end #function bis
