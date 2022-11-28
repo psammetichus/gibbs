@@ -4,6 +4,7 @@ authors = ["Tyson Burghardt <tyson@uncountable.org>"]
 version = "0.1.0"
 
 [deps]
+DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 EDFPlus = "582d7a84-78fd-59ab-a7bb-47fc6b175004"
