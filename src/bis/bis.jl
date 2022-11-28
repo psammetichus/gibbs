@@ -55,7 +55,10 @@ function bispectrum(sig :: Signal, Fs :: Int64, f1 :: Float64, f2 :: Float64) ::
     f1p, f2p, f12p = cycphsamp.((f1,f2,f1+f2))
     freqs = fftfreqs(ll, Fs)
     f1q, f2q, f12q = [findfirst(x->x>f,Xsig)-1 for x in (f1p,f2p,f12p)]
-    return abs(sum(Xsig[[f1q,f2q,f12q]]))
+    X1 = Xsig[f1q]
+    X2 = Xsig[f2q]
+    X3 = Xsig[f12q]
+    return abs(X1*X2*X3')
 end #bispectrum
 
 function bis(sig :: Signal)
