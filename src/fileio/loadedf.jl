@@ -50,7 +50,7 @@ end #saveAsJLD
 
 
 function convertDirectory!()
-    for ef in filter(x->splitext(x)[2] == ".edf", readdir())
+    Threads.@threads for ef in filter(x->splitext(x)[2] == ".edf", readdir())
         f,ext = splitext(ef)
         if isfile(f * ".jld")
             continue
