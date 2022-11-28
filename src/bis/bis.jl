@@ -5,6 +5,7 @@ module BIS
 #DOI:10.1038/s41598-019-50391-x 
 
 using DSP
+using FFTW
 using Basics
 
 function linearbis(which :: String, bsrCoeff, sefCoeff, rbrCoeff, emgCoeff)
@@ -26,10 +27,36 @@ function linearbis(which :: String, bsrCoeff, sefCoeff, rbrCoeff, emgCoeff)
 end
 
 
+function getAround(i, sig, width)
+    ll = length(sig)
+    w = div(width/2)
+    if i - w < 0
+        [repeat([0.0], -(i - w)+1); sig[1:i+w]]
+    elseif i + w > ll
+        [sig[i-w:ll]; repeat([0.0], i+w-ll)] 
+    else
+        sig[i-w:i+w]
+    end
+end #getAround
 
-function bsr(sig :: Signal)
-    
-end
+
+function bsr(sig :: Signal, width :: Int64)
+    ll = length(sig)
+    output = zeros(ll)
+    Threads.@threads for i in 1:ll
+        seg = getAround(i, sig, width)
+        output[i] = length(filter(x->abs(x)<5.0, seg))/ll
+    end #for
+end #function bsr
+
+function bispectrum(sig :: Signal, Fs :: Int64, f1 :: Float64, f2 :: Float64) :: Float64
+    ll = length(sig)
+    Xsig = fft(sig)
+    f1p, f2p, f12p = cycphsamp.((f1,f2,f1+f2))
+    freqs = fftfreqs(ll, Fs)
+    f1q, f2q, f12q = [findfirst(x->x>f,Xsig)-1 for x in (f1p,f2p,f12p)]
+    return abs(sum(Xsig[[f1q,f2q,f12q]]))
+end #bispectrum
 
 function bis(sig :: Signal)
     BSR = bsr(sig)
