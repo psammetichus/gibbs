@@ -7,6 +7,7 @@ module BIS
 using DSP
 using FFTW
 using Basics
+using Statistics
 
 function linearbis(which :: Symbol, bsrCoeff, sefCoeff, rbrCoeff, emgCoeff)
     if which == :green
@@ -51,7 +52,7 @@ end #function bsr
 
 function bispectrum(sig :: Signal, Fs :: Int64, f1 :: Float64, f2 :: Float64) :: Float64
     ll = length(sig)
-    Xsig = fft(sig)
+    Xsig = fft(sig.-mean(sig)) #subtr mean acc to PMC3940018
     f1p, f2p, f12p = cycphsamp.((f1,f2,f1+f2))
     freqs = fftfreqs(ll, Fs)
     f1q, f2q, f12q = [findfirst(x->x>f,Xsig)-1 for x in (f1p,f2p,f12p)]
@@ -60,6 +61,7 @@ function bispectrum(sig :: Signal, Fs :: Int64, f1 :: Float64, f2 :: Float64) ::
     X3 = Xsig[f12q]
     return abs(X1*X2*X3')
 end #bispectrum
+
 
 function bis(sig :: Signal)
     BSR = bsr(sig)
