@@ -1,3 +1,5 @@
+module REST
+
 import LinearAlgebra
 using Statistics
 
@@ -27,5 +29,6 @@ end #rest_refer
 
 function calcLeadField(xyzElec, xyzDipoles, xyzDipOri, headmodel)
 
+end #calcLeadField
 
 end
