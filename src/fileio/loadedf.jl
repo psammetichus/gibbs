@@ -38,15 +38,6 @@ function loadEEGFromEDF(filename :: String)
 end #loadEEG
 
 
-function saveAsJLD(filename :: String, eeg :: EEG)
-    JLD.save(filename, "eeg", eeg)
-end #saveAsJLD
-
-function saveAsArrow(filename :: AbstractString, eeg :: EEG)
-    
-end #saveAsArrow
-
-
 function convertDirectory!()
     Threads.@threads for ef in filter(x->splitext(x)[2] == ".edf", readdir())
         f,ext = splitext(ef)
