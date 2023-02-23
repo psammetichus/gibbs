@@ -1,20 +1,26 @@
-using SQLite
+module EEGData
+
 using DataFrames
 
-function openEegFile(file :: String) :: DB
-  db = DB(file)
-  return db
-end
-
-function getChunk(db :: DB, record :: Int, lead :: Int, offset :: Int) Vector{Float32}
-
-  df = DBInterface.execute(db, """select * from Chunks where record = ?, offset = ?, trodeId = ?""",
-                            [record, offset, lead]) |> DataFrame
+struct Annotation 
+  onset :: Float64
+  duration :: Float64
+  name :: String
+  desc :: String
+end #Annotation struct
   
-  return df[signalData]
+struct EEG
+  signals :: Dict{String, Vector{Float64}}
+  Fs :: Float64
+  annots :: Vector{Annotation}
+end #EEG struct
+
+function signalDataFrame(eeg :: EEG)
+  DataFrame(eeg.signals)
 end
 
-function closeEegFile(db :: DB)
-  #is there no close function?
-end
+function getSignal(fromTime :: Float64, toTime :: Float64)
+  
+end #function
 
+end #module
