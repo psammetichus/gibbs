@@ -1,7 +1,3 @@
-module EEGData
-
-using DataFrames
-
 struct Annotation 
   onset :: Float64
   duration :: Float64
@@ -22,5 +18,3 @@ end
 function getSignal(fromTime :: Float64, toTime :: Float64)
   
 end #function
-
-end #module

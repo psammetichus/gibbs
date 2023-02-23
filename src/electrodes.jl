@@ -1,4 +1,3 @@
-module Electrodes
 
 # we assume a spherical head model
 # θ and ϕ are the colatitude (polar angle) and azimuth
@@ -22,7 +21,7 @@ module Electrodes
 
 
 struct Electrode
-  name :: string
+  name :: String
   position :: Tuple{Float64,Float64}
 end #struct
 
@@ -81,15 +80,11 @@ const ifcn_electrodes =
        "F4" =>  (threefourth,	+threefourphi),
        "P3" =>  (threefourth,	-180+threefourphi),
        "P4" =>  (threefourth,	+180-threefourphi),
-       "P7" =>  (tenUp,         -90 - twenpctDeg)
-       "P8" =>  (tenUp,         +90 + twenpctDeg)
+       "P7" =>  (tenUp,         -90 - twenpctDeg),
+       "P8" =>  (tenUp,         +90 + twenpctDeg),
        "O1" =>  (tenUp,		-180 + tenpctDeg),
        "O2" =>  (tenUp,		+180 - tenpctDeg),
        
-      ),
+      )
 
                 
-
-
-
-end #module

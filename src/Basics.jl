@@ -1,13 +1,9 @@
-module Basics
-
-using Electrodes
-
 Signal = Vector{Float64}
 
 RMat = Array{Float64,2}
 
 
-spectralEdge(s :: Signal, Fs :: Float64, k=0.95, overlap :: Int64, width :: Int64, windower)
+function spectralEdge(s :: Signal, Fs :: Float64, overlap :: Int64, width :: Int64, windower, k=0.95)
     ll = length(s)
     lls = zeros(ll - overlap)
     while i < ll-overlap
@@ -26,12 +22,3 @@ spectralEdge(s :: Signal, Fs :: Float64, k=0.95, overlap :: Int64, width :: Int6
     end
     return lls
 end
-
-
-
-
-
-    
-
-
-end #module

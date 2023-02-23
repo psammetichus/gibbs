@@ -1,5 +1,3 @@
-module PEntropy
-
 function findSymbol(arr :: Vector{Float64}) :: UInt32
     n = length(arr)
     sentinel = true
@@ -44,8 +42,4 @@ function pentropy(arr :: Vector{Float64}, n :: Int64 = 3) :: Float64
 
     return entropy
 end
-
-        
-
-end #module
 

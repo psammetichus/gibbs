@@ -1,8 +1,5 @@
-module LoadEdf
-
 import EDFPlus
 import JLD
-using EEGData
 
 const trodereplacements = Dict(
     "T3" => "T7",
@@ -61,5 +58,3 @@ function convertDirectory!()
 
     end #for
 end #convertDirectory!
-
-end #module
