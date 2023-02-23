@@ -12,6 +12,8 @@ const trodereplacements = Dict(
     "R-EKG" => "ECGR",
     "R-EYE" => "EOGR",
     "L-EYE" => "EOGL",
+    "L EKG" => "ECGL",
+    "R EKG" => "ECGR",
     "T5" => "P7",
     "T6" => "P8"
 )
@@ -24,7 +26,7 @@ function fixname!(signame :: String)
 end #fixname!
 
 
-function loadEEG(filename :: String)
+function loadEEGFromEDF(filename :: String)
     edfh = EDFPlus.loadfile(filename)
     signals = Dict([fixname!(edfh.signalparam[i].label) => EDFPlus.physicalchanneldata(edfh,i) for i in 1:30])
     rawAnnots = append!(edfh.annotations...)
