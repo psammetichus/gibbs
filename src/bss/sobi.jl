@@ -21,8 +21,7 @@ function sobi(X :: Array{Float64,2})
   
   #estimate delayed time cov matrices
   M = estTimeDelayedCov(X, 100)
-  print(size(M))
-
+  
   #conduct approx joint diagonalization
   U = ajd(X,M)
 
@@ -31,8 +30,9 @@ function sobi(X :: Array{Float64,2})
   A = U[1:n, 1:n]
 
   #estimate source activities
-  W = U[1:n,1:n]'*Q
-  S = W*X
+  #W = U[1:n,1:n]'*Q
+  # S = W*X
+  S = A*X
   return A,S
 end #function
 
@@ -59,7 +59,7 @@ function estTimeDelayedCov(X :: Array{Float64,2}, lags=100)
   k = 1
   p = Int(min(lags, ceil(N/3)))
   pn = p*n
-  M = zeros(m,pn)
+  M = zeros(ComplexF64, m,pn)
   for u in 1:m:pn
     k += 1
     Rxp = X[:,k:N]*X[:,1:N-k+1]'/(N-k+1) #m x m matrix
@@ -69,13 +69,13 @@ function estTimeDelayedCov(X :: Array{Float64,2}, lags=100)
   return M
 end
 
-function ajd(X :: Array{Float64,2}, M :: Array{Float64,2})
+function ajd(X :: Array{Float64,2}, M :: Array{ComplexF64,2})
   #approximate joint diagonalization
   m,N = size(X)
   n = m
   pn = size(M)[2]
   encore = true
-  Us = I(n)
+  Us = diagm(repeat([1.0+0.0im], n))
   prec = 1/√(N)/100
   while encore 
     encore = false
@@ -86,10 +86,8 @@ function ajd(X :: Array{Float64,2}, M :: Array{Float64,2})
         g = [ M[p,p:n:pn] - M[q,q:n:pn] ;
               M[p,q:n:pn] + M[q,p:n:pn] ;
               im*(M[q,p:n:pn] - M[p,q:n:pn]) ]
-        Ucp, D = eigen(real(g*g'))
-        print(size(Ucp))
-        print(size(D))
-        K = sortperm(D, dims=1) 
+        D, Ucp = eigen(real(g*g'))
+        K = sortperm(diagm(D), dims=1) 
         angles = Ucp[:,K[3]] #how does this work
         angles = sign(angles[1])*angles
         c = √(0.5+angles[1]/2)
