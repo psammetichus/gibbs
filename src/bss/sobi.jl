@@ -26,13 +26,11 @@ function sobi(X :: Array{Float64,2})
   U = ajd(X,M)
 
   #estimate mixing matrix A
-  #A = pinv(Q)*U[1:n,1:n]
-  A = U[1:n, 1:n]
-
+  A = pinv(Q)*U[1:n,1:n]
+  
   #estimate source activities
-  #W = U[1:n,1:n]'*Q
-  # S = W*X
-  S = A*X
+  W = U[1:n,1:n]'*Q
+  S = W*X
   return A,S
 end #function
 
@@ -41,14 +39,12 @@ function standardize(X :: Array{Float64,2}) :: Array{Float64,2}
 end
 
 function whitenTransformation(X :: Array{Float64,2})
+  #scaled by 1 over the sqrt of the eigenvalues
   m,N = size(X)
-  
-  Rxx = X[:,1:N-1]*X[:,2:N]'/(N-1)
-  U,S,V = svd(Rxx)
-  
-  S = S .- real(mean(S))
-  Q = diagm(real(sqrt.(1 ./ Complex(S[1:n]))))*U[:,1:n]
-  return Q
+  Rxx = X[:,1:N-1]*X[:,2:N]'/(N-1) #estimate covariance matrix with time lag 1
+  vals,vecs = eigen(Rxx)
+  vals = 1 ./ sqrt.(vals)
+  return diagm(vals)
   #not correct
 end
 
