@@ -45,10 +45,9 @@ function whitenTransformation(X :: Array{Float64,2})
   
   Rxx = X[:,1:N-1]*X[:,2:N]'/(N-1)
   U,S,V = svd(Rxx)
-  S = diagm(S)
   
-  S = S .- real(mean(S[n+1:m]))
-  Q = diagm(real(sqrt.(1 ./ S[1:n])))*U[:,1:n]
+  S = S .- real(mean(S))
+  Q = diagm(real(sqrt.(1 ./ Complex(S[1:n]))))*U[:,1:n]
   return Q
   #not correct
 end
@@ -76,7 +75,7 @@ function ajd(X :: Array{Float64,2}, M :: Array{ComplexF64,2})
   pn = size(M)[2]
   encore = true
   Us = diagm(repeat([1.0+0.0im], n))
-  prec = 1/√(N)/100
+  ϵ = 1/√(N)/100
   while encore 
     encore = false
     for p=1:n-1
@@ -93,7 +92,7 @@ function ajd(X :: Array{Float64,2}, M :: Array{ComplexF64,2})
         c = √(0.5+angles[1]/2)
         sr = 0.5*(angles[2] - im*angles[3])/c
         sc = conj(sr)
-        asr = abs(sr) > prec
+        asr = abs(sr) > ϵ
         encore = encore || asr
         if asr
           colp = M[:,p:n:pn]
