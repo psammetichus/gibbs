@@ -2,6 +2,7 @@ module SOBI
 
 using LinearAlgebra
 using Statistics
+using Logging
 
 # from P-SOBI: A Parallel Implementation for Second Order Blind Identification Algorithm 
 # 10.1109/HPCC/SmartCity/DSS.2019.00196
@@ -15,20 +16,26 @@ function sobi(X :: Array{Float64,2})
   n = m
   defaultLags = 100
   #standardize and whiten
+  @info "Standardizing data matrix..."
   X = standardize(X)
-  #Q = whitenTransformation(X)
-  #X = Q*X
+  @info "Whitening transformation calculated..."
+  Q = whitenTransformation(X)
+  X = Q*X
   
   #estimate delayed time cov matrices
+  @info "Estimating lagged covariance matrices..."
   M = estTimeDelayedCov(X, 100)
   
   #conduct approx joint diagonalization
+  @info "Approximate joint diagonolization starting..."
   U = ajd(X,M)
 
   #estimate mixing matrix A
+  @info "Estimating mixing matrix..."
   A = pinv(Q)*U[1:n,1:n]
   
   #estimate source activities
+  @info "Estimating source activities..."
   W = U[1:n,1:n]'*Q
   S = W*X
   return A,S
@@ -43,7 +50,7 @@ function whitenTransformation(X :: Array{Float64,2})
   m,N = size(X)
   Rxx = X[:,1:N-1]*X[:,2:N]'/(N-1) #estimate covariance matrix with time lag 1
   vals,vecs = eigen(Rxx)
-  vals = 1 ./ sqrt.(vals)
+  vals = 1 ./ real.(sqrt.(vals))
   return diagm(vals)
   #not correct
 end
@@ -70,10 +77,14 @@ function ajd(X :: Array{Float64,2}, M :: Array{ComplexF64,2})
   n = m
   pn = size(M)[2]
   encore = true
+  iteration = 0
   Us = diagm(repeat([1.0+0.0im], n))
   ϵ = 1/√(N)/100
+  @info "Main loop"
   while encore 
+    @info "While loop $iteration"
     encore = false
+    iteration += 1
     for p=1:n-1
       for q=p+1:n
         pn = 100*n
@@ -89,8 +100,10 @@ function ajd(X :: Array{Float64,2}, M :: Array{ComplexF64,2})
         sr = 0.5*(angles[2] - im*angles[3])/c
         sc = conj(sr)
         asr = abs(sr) > ϵ
+        @info "abs(sr) is $(abs(sr))"
         encore = encore || asr
         if asr
+          @info "inner loop $(p) $encore"
           colp = M[:,p:n:pn]
           colq = M[:,q:n:pn]
           M[:,p:n:pn] = c * colp + sr * colq
