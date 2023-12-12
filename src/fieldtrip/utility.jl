@@ -22,5 +22,48 @@ function solidAngle(v1 :: Vertex, v2 :: Vertex, v3 :: Vertex)
     return 2 * atan(nom, den)
 end #function
 
+function fitsphere(points :: Array{Float64,2})
+    #points is Nx3 array
+    x = points[:,1]
+    y = points[:,2]
+    z = points[:,3]
+
+    l = ones(length(x))
+    O = zeros(length(x))
+
+    #make design matrix
+    D = [ (x .* x + y .* y + z .* z) x y z l ]
+
+    Dx = [2x l O O O]
+    Dy = [2y O l O O]
+    Dz = [2z O O l O]
+
+    #create scatter matrices
+    M = D' * D
+    N = Dx' * Dx + Dy' * Dy + Dz' * Dz
+
+    #eigensystem
+    ee = eigen(M)
+    minval = eps(Float64)*5*norm(M)
+    Mrank = sum(all(vals -> vals > minval))
+
+    if Mrank == 5
+        #full rank; min ev corresponds to solution
+        vals, vecs = eigen( inv(M) * N )
+        dmin, dminidx = findmax(values)
+        pvec = vecs[:, dminidx[1]]'
+    else
+        #rank deficient; extract nullspace of M
+        idx = findall(val -> val <= eps(Float64)*5*norm(M), vals)
+        pvec = v[:, idx]
+        m,n = size(pvec)
+        if m > 1
+            pvec = pvec[1,:]
+        end
+    end
+
+
+
+
 
 end #module
