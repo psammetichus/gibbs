@@ -1,14 +1,6 @@
 module Fields
 
-struct Vertex
-    x :: Float64
-    y :: Float64
-    z :: Float64
-end
-
-function vtxToArr(v :: Vertex) :: Array{Float64,1}
-    Array(x; y; z)
-end
+const Vertex = Array{Float64,1}
 
 function solidAngle(v1 :: Vertex, v2 :: Vertex, v3 :: Vertex)
     cp23x = v2[2]*v3[3] - v2[3]*v3[2]
