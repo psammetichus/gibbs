@@ -9,7 +9,7 @@ using LinearAlgebra
 include("Basics.jl")
 include("electrodes.jl")
 include("EEGData.jl")
-
+include("bss/sobi.jl")
 include("fileio/eegJLD.jl")
 include("fileio/loadedf.jl")
 
