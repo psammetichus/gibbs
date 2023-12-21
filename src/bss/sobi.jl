@@ -3,9 +3,7 @@ module SOBI
 using LinearAlgebra
 using Statistics
 using Logging
-
-# from P-SOBI: A Parallel Implementation for Second Order Blind Identification Algorithm 
-# 10.1109/HPCC/SmartCity/DSS.2019.00196
+using Diagonalizations
 
 
 # X is an m × N matrix (N is number of samples, m is number of sensors)
@@ -27,8 +25,8 @@ function sobi(X :: Array{Float64,2})
   M = estTimeDelayedCov(X, 100)
   
   #conduct approx joint diagonalization
-  @info "Approximate joint diagonolization starting..."
-  U = ajd(X,M)
+  @info "Approximate joint diagonalization starting..."
+  U = ajd(X,M...)
 
   #estimate mixing matrix A
   @info "Estimating mixing matrix..."
@@ -71,55 +69,5 @@ function estTimeDelayedCov(X :: Array{Float64,2}, lags=100)
   return M
 end
 
-function ajd(X :: Array{Float64,2}, M :: Array{ComplexF64,2})
-  #approximate joint diagonalization
-  m,N = size(X)
-  n = m
-  pn = size(M)[2]
-  encore = true
-  iteration = 0
-  Us = diagm(repeat([1.0+0.0im], n))
-  ϵ = 1/√(N)/100
-  @info "Main loop"
-  while encore 
-    @info "While loop $iteration"
-    encore = false
-    iteration += 1
-    for p=1:n-1
-      for q=p+1:n
-        pn = 100*n
-        #Givens rotations
-        g = [ M[p,p:n:pn] - M[q,q:n:pn] ;
-              M[p,q:n:pn] + M[q,p:n:pn] ;
-              im*(M[q,p:n:pn] - M[p,q:n:pn]) ]
-        D, Ucp = eigen(real(g*g'))
-        K = sortperm(diagm(D), dims=1) 
-        angles = Ucp[:,K[3]] #how does this work
-        angles = sign(angles[1])*angles
-        c = √(0.5+angles[1]/2)
-        sr = 0.5*(angles[2] - im*angles[3])/c
-        sc = conj(sr)
-        asr = abs(sr) > ϵ
-        @info "abs(sr) is $(abs(sr))"
-        encore = encore || asr
-        if asr
-          @info "inner loop $(p) $encore"
-          colp = M[:,p:n:pn]
-          colq = M[:,q:n:pn]
-          M[:,p:n:pn] = c * colp + sr * colq
-          M[:,q:n:pn] = c * colq - sc * colp
-          rowp = M[p,:]
-          rowq = M[q,:]
-          M[p,:] = c*rowp+sc*rowq
-          M[q,:] = c*rowq-sr*rowp
-          temp = Us[:,p]
-          Us[:,p] = c*Us[:,p] + sr*Us[:,q]
-          Us[:,q] = c*Us[:,q] + sc*temp
-        end #if
-      end #q loop
-    end #p loop
-  end #while
-  return Us
-end #function
 
 end #module
