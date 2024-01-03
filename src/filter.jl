@@ -8,8 +8,8 @@ function prepareFilter(bpass, taps=64, Fs)
 end
 
 function dataFirFilter(data, bpass, taps=64, Fs)
-    zpk = prepareFilter(bpass, taps, Fs)
-    fData = filter(data, zpk)
+    zpg = prepareFilter(bpass, taps, Fs)
+    fData = filter(data, zpg)
 end
 
 function eegFirFilter(eeg :: EEG, bpass, taps=64)
@@ -18,5 +18,7 @@ function eegFirFilter(eeg :: EEG, bpass, taps=64)
     end
 end
 
+function dataIirFilter(data, bpass, order=2, Fs)
+    
 
 end #module
