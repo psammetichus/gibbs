@@ -1,5 +1,6 @@
 import EDFPlus
 import JLD
+using Logging
 
 const trodereplacements = Dict(
     "T3" => "T7",
@@ -45,9 +46,9 @@ function convertDirectory!()
             continue
         end #if
 
-        println("Converting $ef...")
+        @info "Converting $ef..."
         saveAsJLD(f*".jld", loadEEG(ef))
-        println("...converted $ef")
+        @info "...converted $ef"
 
     end #for
 end #convertDirectory!
