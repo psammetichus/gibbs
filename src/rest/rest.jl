@@ -2,6 +2,7 @@ module REST
 
 import LinearAlgebra
 using Statistics
+using LegendrePolynomials
 
 # data is the EEG potentials with average reference, chan x samples
 # G is the lead field matrix, sources x channels
@@ -27,8 +28,30 @@ function rest_refer(data :: Rmat, G :: Rmat) :: Rmat
 
 end #rest_refer
 
-function calcLeadField(xyzElec, xyzDipoles, xyzDipOri, headmodel)
+function calcTransformMatrix(V :: Rmat, est)
+end
 
+function invertG(G :: Rmat)
+end
+
+function calcRef(V, G)
+end
+
+function δ(i,j)
+  if i == j
+    return 1
+  else
+    return 0
+  end
+end
+
+function g(m, l, x, x₀, P, δ₁,θ,ϕ)
+  (x₀[1]^(l-1)/4πδ₁ )*(2-δ(m,0))*( factorial(l-m)/factorial(l+m))*(l*P[0]*Plm(cos(x₀[2])*cos(m*x₀[3])) -
+  m*P[3]/sin(x₀[2])*Plm(cos(x₀[2]))*sin(m*x₀[3]) - P[2]/2*()
+
+
+function calcLeadField(xyzElec, xyzDipoles, xyzDipOri, headmodel)
+  
 end #calcLeadField
 
 end

@@ -5,10 +5,11 @@ struct Annotation
   desc :: String
 end #Annotation struct
   
-struct EEG
+mutable struct EEG
   signals :: Dict{String, Signal}
   Fs :: Float64
   annots :: Vector{Annotation}
+  procSignals :: Dict{String, Signal}
 end #EEG struct
 
 struct EEGFrame

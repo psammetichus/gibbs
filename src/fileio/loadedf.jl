@@ -1,5 +1,6 @@
 import EDFPlus
 import JLD
+using Logging
 
 const trodereplacements = Dict(
     "T3" => "T7",
@@ -8,8 +9,8 @@ const trodereplacements = Dict(
     "A2" => "T10",
     "T1" => "F9",
     "T2" => "F10",
-    "L-EKG" => "ECGL",
-    "R-EKG" => "ECGR",
+    "L EKG" => "ECGL",
+    "R EKG" => "ECGR",
     "R-EYE" => "EOGR",
     "L-EYE" => "EOGL",
     "L EKG" => "ECGL",
@@ -45,9 +46,15 @@ function convertDirectory!()
             continue
         end #if
 
-        println("Converting $ef...")
+        @info "Converting $ef..."
         saveAsJLD(f*".jld", loadEEG(ef))
-        println("...converted $ef")
+        @info "...converted $ef"
 
     end #for
+
+function loadEEGfromJLD(filename :: String)
+    f = JLD.loadfile(filename)
+    close(f)
+end
+
 end #convertDirectory!
