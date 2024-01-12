@@ -50,5 +50,14 @@ function emd(data, θ1=0.05, θ2=0.5, α=0.05)
     return imfs
 end #function
 
+function hilbertHuang(data, θ1=0.05, θ2=0.5, α=0.05)
+    imfs = emd(data, θ1, θ2, α)
+    himfs = zeros(Complex128, (rows,cols))
+    rows, cols = size(imfs)
+    for i in 1:rows
+        himfs[i,:] = hilbert(imfs[i,:])
+    end #for
+    return himfs
+end #function
 
 end #function
