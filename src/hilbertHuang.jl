@@ -46,7 +46,7 @@ function emd(data, θ1=0.05, θ2=0.5, α=0.05)
     while stop == false
         imfn, resid, stopOrNot = emdRound(resid, θ1, θ2, α)
         stop = stopOrNot
-        vcat(imfs, imfn)
+        push!(imfs, imfn)
     end #while
     return imfs
 end #function
