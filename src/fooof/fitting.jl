@@ -26,6 +26,6 @@ function expoFittingFunc(xs :: Vector{Float64}, params :: Tuple{Float64,Float64,
     ys = ys .+ (offset .- log10.(knee + xs.^expnt))
 
     return ys
-
+end #func
 
 
