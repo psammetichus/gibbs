@@ -58,8 +58,16 @@ function robustApFit(freqs, powerSpectrum, apPcntleThresh, apMode, apBounds)
 end #func
 
 
-function simpleApFit(freqs, powerSpectrum)
-    #todo    
+function simpleApFit(freqs, powerSpectrum, apGuess)
+
+    #powerSpectrum is in log10 scale
+    #get guess params or calc from data as needed
+
+    offGuess = [powerSpectrum[1] if ! apGuess[1] else apGuess[1] end ]
+    kneeGuess = [apGuess[2]] if apMode == "knee" else [] end
+    #expGuess = [ abs(power
+
+
 end #func
 
 
