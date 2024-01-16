@@ -1,4 +1,4 @@
-module EEGFilter
+module Filtering
 
 using DSP
 
