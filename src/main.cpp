@@ -1,5 +1,5 @@
 #include <QtWidgets>
-#include "mainwindow.h"
+#include "main.h"
 
 
 MainWindow::MainWindow()
