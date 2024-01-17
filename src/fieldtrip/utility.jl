@@ -62,7 +62,7 @@ function fitsphere(points :: Array{Float64,2})
         end
     end
 
-
+end #function
 
 
 

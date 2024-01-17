@@ -36,7 +36,7 @@ function emdRound(data, θ1=0.05, θ2=0.5, α=0.05)
 
     #return the intrinsic mode function, the residual, and the stop flag
     return imf, (data .- emd), stopOrNot
-end
+end #emdRound function
 
 
 function emd(data, θ1=0.05, θ2=0.5, α=0.05)
@@ -59,6 +59,4 @@ function hilbertHuang(data, θ1=0.05, θ2=0.5, α=0.05)
         himfs[i,:] = hilbert(imfs[i,:])
     end #for
     return himfs
-end #function
-
 end #function

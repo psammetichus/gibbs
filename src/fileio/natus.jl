@@ -22,6 +22,13 @@ module XLTEKReader
 using Dates
 using Match
 
+struct EEGMontage
+  chanLabels :: Vector{String}
+  chanNumber :: Int
+  mtxt :: String
+end
+
+
 mutable struct Openxlt
   #filenames
   nameScript :: String
@@ -104,11 +111,6 @@ mutable struct Openxlt
 
 end #struct
 
-struct EEGMontage
-  chanLabels :: Vector{String}
-  chanNumber :: Int
-  mtxt :: String
-end
 
 #type alias
 XltObj = Union{Vector,String,Dict,Pair}
@@ -139,7 +141,7 @@ function parseObj(oxlt :: Openxlt, cur :: Int, intxt :: String) :: Tuple{Openxlt
     elseif intxt[cur] == '"'
       aString, cur = parseArray(cur, intxt)
       stateType = 'v'
-    end
+    end #ifelseif
     
     cur += 1
 
@@ -173,14 +175,14 @@ function parsePair(oxlt :: Openxlt, cur :: Int, intxt :: String) :: Tuple{Pair,I
         if intxt[cur+1] == ')'
           val = nothing
           break
-        end
-      end
+        end #if
+      end #ifelse
     elseif intxt[cur] == ','
       val, cur = parseValue(oxlt, cur+2, intxt)
       break
     elseif stateIsKey
       append!(key, intxt[cur])
-    end
+    end #ifelseif
   end #while
 
   return (cleanKey(key) => val, cur)
@@ -209,9 +211,9 @@ function parseArray(oxlt :: Openxlt, cur::Int, intxt::String) :: Tuple{Array,Int
         if intxt[cur+1] != ','
           break
         end
-      catch
+      catch e
         break
-      end
+      end #try
     elseif intxt[cur] == '"'
       obj, cur = parseObj(cursor+1,intxt)
       append!(outArray,obj)
@@ -221,12 +223,14 @@ function parseArray(oxlt :: Openxlt, cur::Int, intxt::String) :: Tuple{Array,Int
         end
       catch
         break
-      end
-    end
+      end #try
+    end #ifelseif
     cur += 1
       #array of char not the same as a string
-  end
+  end #while
+
     return outArray, cur
+
 end #parseArray
 
 """
@@ -236,7 +240,7 @@ end #parseArray
 not sure the return value yet
 
 """
-function parseValue(oxlt :: Openxlt, cur::Int, intxt::String) :: Tuple{Any,Int}
+function parseValue(oxlt, cur::Int, intxt::String) :: Tuple{Any,Int}
   stateIsObj = false
   #64 digit--supposed to be a 64bit value I think
   val = "0000000000000000000000000000000000000000000000000000000000000000" #okay...
@@ -245,48 +249,62 @@ function parseValue(oxlt :: Openxlt, cur::Int, intxt::String) :: Tuple{Any,Int}
   retObj = nothing
   while true
     c = intxt[cur]
+    
     if c == '('
       val, cur = parseObj(oxlt, cur+1, intxt)
       stateIsObj = true
       break
-    elseif c == == ')'
+    
+    elseif c == ')'
       cur -= 1
       break
+    
     elseif c == ',' && !stateParen
       cur -= 1
       break
+    
     else
+    
       if c == '"'
         stateParen = !stateParen
-      end
+      end #if
+
       val[valIdx] = c
       valIdx += 1
-    end
+    end #ifelseif
+
     cur +=1
-  end
+
+  end #while
 
   if stateIsObj
     retObj = val
   else
     retObj = val[1:valIdx-1]
-  end
+  end #if
+
   return retObj, cur
 
-  end #while
 end #parseValue
 
 
-"""
+function parseMontageFromEEG(oxlt)
+  if !oxlt.stateLoadedEEGMontages || null(oxlt.objectEEGMontage)
+    throw(MontageNotLoadedError)
+  end #if
 
-  cleanKey(oxlt, key)
+  #wait this is fucking stupid
+  hh = transcode(UInt8, "ChanNames")
 
-cleans a key
-"""
-function cleanKey(oxlt ::Openxlt, key :: Key) :: String
-  key = replace(key, ' ' => '')
-  key = replace(key, '@' => '')
-  key = replace(key, '#' => '')
-  key = replace(key, "''" => '') # I think?
+  mtxt = split(oxlt.objectEEGMontage.mtxt, "0x")
+
+end #parseMontageFromEEG
+
+function cleanKey(oxlt, key) :: String
+  key = replace(key, ' ' => "")
+  key = replace(key, '@' => "")
+  key = replace(key, '#' => "")
+  key = replace(key, "''" => "") # I think?
 
   #pad names with leading zeros
   if isdigit(key[1])
@@ -300,7 +318,7 @@ function cleanKey(oxlt ::Openxlt, key :: Key) :: String
 end #cleanKey
 
 
-function cleanText(oxlt::Openxlt, intxt)
+function cleanText(oxlt, intxt)
   level = 0
   stateStarted = false
   cursorStart = 1
@@ -318,24 +336,13 @@ function cleanText(oxlt::Openxlt, intxt)
       if level == 0 && stateStarted
         stateStarted = false
         outcell
+      end #if
+    end #ifelseif
   end #for
 end #cleanText
 
 
-function parseMontageFromEEG(oxlt::Openxlt)
-  if !oxlt.stateLoadedEEGMontages || null(oxlt.objectEEGMontage)
-    throw MontageNotLoadedError
-  end
-
-  #wait this is fucking stupid
-  hh = transcode(UInt8, "ChanNames")
-
-  mtxt = split(oxlt.objectEEGMontage.mtxt, "0x")
-
-end #parseMontageFromEEG
-
-
-function loadEEG(oxlt::Openxlt)
+function loadEEG(oxlt)
   logBytes = 320
   idBytes = 20
   intBytes = 4
@@ -344,8 +351,10 @@ function loadEEG(oxlt::Openxlt)
   ID_EEG = [-905246832,298899349,-1610599761,-1521198300,65539]
 
   fEEG = open(oxlt.nameFileEEG, 'r')
-  eegID = read(fEEG, <F5>
-
+  eegID = "Complete this"
+  
 
 
 end #loadEEG
+
+end #module

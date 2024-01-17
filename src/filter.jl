@@ -13,7 +13,7 @@ function dataFirFilter(data, bpass, taps=64, Fs)
 end
 
 function eegFirFilter!(eeg :: EEG, bpass, taps=64)
-    for trode, sig in eeg.signals
+    for (trode, sig) in eeg.signals
         eeg.signals[trode] = dataFirFilter(sig, bpass, taps, eeg.Fs)
     end
 end
@@ -25,7 +25,7 @@ function dataIirFilter(data, bpass, order=2, Fs)
 end
 
 function eegIirFilter!(eeg :: EEG, bpass)
-    for trode, sig in eeg.signals
+    for (trode, sig) in eeg.signals
         eeg.signals[trode] = dataIirFilter(sig, bpass, eeg.Fs)
     end
 end

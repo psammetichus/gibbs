@@ -8,7 +8,7 @@ using LinearAlgebra
 function gm(m :: Integer, N :: Integer, x :: Float64)
     weights = [(2n + 1)(n*(n+1))^m for n = 1:N]
     pls = LP.collectPl(x,N)[2:end]
-    (weights *. pls)/4π
+    (weights .* pls)/4π
 end
 
 function Vest(r :: Vector{Float64}, cnull :: Float64, 
@@ -58,7 +58,9 @@ function lapl(i,t, data, λ=1e-5, G, H)
     di = data[i,t]^-1 * Gs
     Ci = zeros(nelec)
     for j in 1:nelec
-       Ci += di/( 
+       Ci += di/()
 
+
+end #lapl
 
 end #module

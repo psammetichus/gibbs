@@ -11,6 +11,6 @@ function rRestCore(data :: RMat, K :: Rmat) :: (RMat, RMat, Rmat, RMat, Float64)
   lmds = rRestGenLmd(1000)
   rss = zero(lmds)
   df = zero(lmds)
-  dataRScaled = dataR ./ norm(dataR, 'fro')
+  dataRScaled = dataR ./ norm(dataR, "fro")
 
 end

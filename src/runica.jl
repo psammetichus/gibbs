@@ -42,10 +42,11 @@ function runica(data :: Matrix{Float64}; kwargs...)
     DEFAULT_BIASFLAG    =       true
     DEFAULT_RESRNDSEED  =       true
 
-#setup kw defaults
+    #setup kw defaults
 
-epochs = 1
-pcaflag = 
-
+    epochs = 1
+    pcaflag = "completeme"
+    
+end #function
 
 end #module

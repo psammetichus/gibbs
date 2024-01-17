@@ -9,7 +9,7 @@
 function gaussianFittingFunc(xs :: Vector{Float64}, params :: Vector{Tuple{Float64,Float64,Float64}})
     ys = zero(xs)
 
-    for p in params:
+    for p ∈ params
         μ, height, wid = p
         ys .+= height*exp.( -(x.-μ).^2 ./ (2wid^2))
     end #for
