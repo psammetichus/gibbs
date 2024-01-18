@@ -29,3 +29,11 @@ create table Electrodes (
       trodeName text
 );
 
+create table Annotations (
+      annotID integer primary key autoincrement,
+      recID integer references RecordData(recordId),
+      onset real,
+      duration real,
+      name text,
+      desc text
+);

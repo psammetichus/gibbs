@@ -10,11 +10,13 @@ mutable struct EEG
   Fs :: Float64
   annots :: Vector{Annotation}
   procSignals :: Dict{String, Signal}
+  length :: Int64
 end #EEG struct
 
 struct EEGFrame
   signals :: DataFrame
   annots :: DataFrame
+  length :: Int64
   Fs :: Float64
 end
 
@@ -29,3 +31,9 @@ function getSignal(eeg:: EEGFrame, fromTime :: Float64, toTime :: Float64)
   f, t = Int.(floor.((fromTime, toTime).*eeg.Fs))
   eeg.signals[f:t, :]
 end #function
+
+mutable struct Subject
+  id :: String
+  age :: Int
+  gender :: String
+end
