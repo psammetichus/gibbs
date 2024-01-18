@@ -6,7 +6,8 @@ struct Annotation
 end #Annotation struct
   
 mutable struct EEG
-  signals :: Dict{String, Signal}
+  signals :: Array{Signal,2} #nsamples × mchans
+  trodes :: Array{String} #m chans
   Fs :: Float64
   annots :: Vector{Annotation}
   procSignals :: Dict{String, Signal}
@@ -37,3 +38,6 @@ mutable struct Subject
   age :: Int
   gender :: String
 end
+
+function getSignal(eeg :: EEG, trode :: String)
+end #function
