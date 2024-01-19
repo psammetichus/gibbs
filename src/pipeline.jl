@@ -23,7 +23,7 @@ function segment(data :: Array{Float64,1}, segLength = 1024)
     return collection
 end #function
 
-function filter(eeg :: EEG, bp, notch=false, Fs)
+function filter(eeg :: EEG, Fs, bp=(1.0,70.0), notch=false)
     filtered = eegFirFilter!(data, bp)
     #now clean with SOBI
     dataMatrix = hcat(values(eeg.signals))
@@ -31,4 +31,3 @@ function filter(eeg :: EEG, bp, notch=false, Fs)
     for i in 1:size(dataMatrix,1)
         dataMatrix[i,:] = dataMatrix[i,:] - S[1,:]
     end #for
-    
