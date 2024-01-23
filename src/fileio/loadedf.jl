@@ -36,12 +36,14 @@ end #fixname!
 
 function loadEEGFromEDF(filename :: String)
     edfh = EDFPlus.loadfile(filename)
-    names = [fixname!(edfh.signalparam[i].label) for i in 1:30]
-    signals = hcat( [EDFPlus.physicalchanneldata(edfh,i) for i in 1:30] )
+    nchans = edfh.channelcount
+    names = [fixname!(edfh.signalparam[i].label) for i in 1:nchans]
+    signals = hcat( [EDFPlus.physicalchanneldata(edfh,i) for i in 1:nchans] )
     rawAnnots = append!(edfh.annotations...)
     annots = [Annotation(ann.onset, 0.0, ann.annotation[1], ann.annotation[2]) for ann in rawAnnots]
     Fs = EDFPlus.samplerate(edfh, 2) # assumption that the sampling rate is the same on all channels; avoid channel 1 in case annotation
-    myEEG = EEG(signals, names, Fs, annots)
+    l = edfh.datarecords * Fs
+    myEEG = EEG(signals, names, Fs, annots, l)
     EDFPlus.closefile!(edfh)
     return myEEG
 end #loadEEG
