@@ -52,6 +52,17 @@ mutable struct Subject
 end
 
 function getSignal(eeg :: EEG, trode :: String)
+    for (i, name) in enumerate(trodes)
+        if name == trode
+            return i
+        else
+            return nothing
+        end #if
+    end #for
+end #function
+
+function getSignal(eeg :: EEG, chan :: Int64)
+    return eeg.signals[:,chan]
 end #function
 
 end #module
