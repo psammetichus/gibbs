@@ -1,12 +1,5 @@
 module Gibbs
 
-using DataFrames
-import EDFPlus
-using Statistics
-using Logging
-using LinearAlgebra
-using DSP
-
 include("Basics.jl")
 include("electrodes.jl")
 include("EEGData.jl")

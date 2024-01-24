@@ -52,9 +52,9 @@ mutable struct Subject
 end
 
 function getSignal(eeg :: EEG, trode :: String)
-    for (i, name) in enumerate(trodes)
+    for (i, name) in enumerate(eeg.trodes)
         if name == trode
-            return i
+            return eeg.signals[:, i]
         else
             return nothing
         end #if
