@@ -19,6 +19,9 @@
 #
 #
 
+module Trodes 
+
+export Electrode, whichSide, ifcn_electrodes
 
 struct Electrode
   name :: String
@@ -57,34 +60,33 @@ const threefourphi = 40.48
 # also subject to the constraint that circles defined by F7, Fz, F8 and P7, Pz,
 # P8 will mark F3,F4 and P3,P4
 
-const ifcn_electrodes = 
-  Dict(
-       "Cz" =>  (0,		0),
-       "Nz" =>  (+90,		0),
-       "In" =>  (+90,		+180),
-       "T9" =>  (+90,		-90),
-       "T10" => (+90,		+90),
-       "Fpz" => (tenUp,		0),
-       "Fz" =>  (twenDown,	0),
-       "Pz" =>  (twenDown,	+180),
-       "Oz" =>  (tenUp,		+180),
-       "T7" =>  (tenUp,		-90),
-       "T8" =>  (tenUp,		+90),
-       "C3" =>  (twenDown,	-90),
-       "C4" =>  (twenDown,	+90),
-       "Fp1" => (tenUp,		-tenpctDeg),
-       "Fp2" => (tenUp,		+tenpctDeg),
-       "F7" =>  (tenUp,		-90 + twenpctDeg),
-       "F8" =>  (tenUp,		+90 - twenpctDeg),
-       "F3" =>  (threefourth,	-threefourphi),
-       "F4" =>  (threefourth,	+threefourphi),
-       "P3" =>  (threefourth,	-180+threefourphi),
-       "P4" =>  (threefourth,	+180-threefourphi),
-       "P7" =>  (tenUp,         -90 - twenpctDeg),
-       "P8" =>  (tenUp,         +90 + twenpctDeg),
-       "O1" =>  (tenUp,		-180 + tenpctDeg),
-       "O2" =>  (tenUp,		+180 - tenpctDeg),
+const ifcn_electrodes = [
+       Electrode("Cz", 	(0,		0)),
+       Electrode("Nz", 	(+90,		0)),
+       Electrode("In", 	(+90,		+180)),
+       Electrode("T9", 	(+90,		-90)),
+       Electrode("T10",	(+90,		+90)),
+       Electrode("Fpz", (tenUp,		0)),
+       Electrode("Fz", 	(twenDown,	0)),
+       Electrode("Pz", 	(twenDown,	+180)),
+       Electrode("Oz", 	(tenUp,		+180)),
+       Electrode("T7", 	(tenUp,		-90)),
+       Electrode("T8", 	(tenUp,		+90)),
+       Electrode("C3", 	(twenDown,	-90)),
+       Electrode("C4", 	(twenDown,	+90)),
+       Electrode("Fp1",	(tenUp,		-tenpctDeg)),
+       Electrode("Fp2",	(tenUp,		+tenpctDeg)),
+       Electrode("F7", 	(tenUp,		-90 + twenpctDeg)),
+       Electrode("F8", 	(tenUp,		+90 - twenpctDeg)),
+       Electrode("F3", 	(threefourth,	-threefourphi)),
+       Electrode("F4", 	(threefourth,	+threefourphi)),
+       Electrode("P3", 	(threefourth,	-180+threefourphi)),
+       Electrode("P4", 	(threefourth,	+180-threefourphi)),
+       Electrode("P7", 	(tenUp,         -90 - twenpctDeg)),
+       Electrode("P8", 	(tenUp,         +90 + twenpctDeg)),
+       Electrode("O1", 	(tenUp,		-180 + tenpctDeg)),
+       Electrode("O2", 	(tenUp,		+180 - tenpctDeg))
+	]
        
-      )
 
-                
+end #module 
