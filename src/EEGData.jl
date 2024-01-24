@@ -1,3 +1,11 @@
+module EEGStruct
+
+export Annotation, EEG, EEGFrame, convertToDataFrame, getSignal
+using DataFrames
+using ..Basics
+
+
+
 struct Annotation 
   onset :: Float64
   duration :: Float64
@@ -29,3 +37,5 @@ function getSignal(eeg:: EEGFrame, fromTime :: Float64, toTime :: Float64)
   f, t = Int.(floor.((fromTime, toTime).*eeg.Fs))
   eeg.signals[f:t, :]
 end #function
+
+end #module
