@@ -1,5 +1,7 @@
-using .Filtering
-using .SOBI
+module Pipeline
+
+using ..Filtering
+using ..SOBI
 using StatsBase
 
 function zeroExtend(arr, i, l, segLength)
@@ -34,7 +36,7 @@ function filter(eeg :: EEG, Fs, bp=(1.0,70.0), notch=false)
     end #for
 end #function
 
-function standardize(eeg :: EEG)
+function standardize!(eeg :: EEG)
   chans = size(eeg.signals, 2)
   for i in 1:chans
     sig = eeg.signals[:,i]
@@ -42,3 +44,14 @@ function standardize(eeg :: EEG)
     eeg.signals[:,i] = sig
   end #for
 end #function
+
+function rectify!(eeg :: EEG)
+  chans = size(eeg.signals, 2)
+  for i in 1:chans
+    eeg.signals[:,i] = abs.(eeg.signals[:,i])
+  end #for
+end #function
+
+
+end #module
+
