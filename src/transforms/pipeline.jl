@@ -16,7 +16,7 @@ function eegSegment(data :: Array{Float64,1}, segLength = 1024)
     collection = undef(segms)
     j = 1
     for i in 1:segLength:l
-        a[j] = zeroExtend(data, i, l, segLength))
+        a[j] = zeroExtend(data, i, l, segLength)
         j +=1
     end #for
     return collection
