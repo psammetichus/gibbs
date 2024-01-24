@@ -55,10 +55,9 @@ function getSignal(eeg :: EEG, trode :: String)
     for (i, name) in enumerate(eeg.trodes)
         if name == trode
             return eeg.signals[:, i]
-        else
-            return nothing
         end #if
     end #for
+    return nothing
 end #function
 
 function getSignal(eeg :: EEG, chan :: Int64)
