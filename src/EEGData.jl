@@ -1,9 +1,5 @@
-module EEGStruct
-
-export Annotation, EEG, EEGFrame, convertToDataFrame, getSignal
 using DataFrames
-using ..Basics
-using ..Trodes
+
 
 
 struct Annotation 
@@ -64,4 +60,3 @@ function getSignal(eeg :: EEG, chan :: Int64)
     return eeg.signals[:,chan]
 end #function
 
-end #module

@@ -1,5 +1,16 @@
 module Gibbs
 
+export  Electrode, whichSide, ifcn_electrodes,
+        Signal, RMat, spectralEdge,
+        saveAsJLD, loadJLD,
+        Annotation, EEG, EEGFrame, convertToDataFrame, getSignal,
+        loadEEGFromEDF, loadEEGFromJLD, convertDirectory!,
+        dataFirFilter, eegFirFilter!, dataIirFilter, eegIirFilter!,
+        emd, hilbertHuang,
+        eegSegment, eegFilter, eegStandardize!, eegRectify!,
+        findSymbol, pentropy,
+        sobi
+
 include("Basics.jl")
 include("electrodes.jl")
 include("EEGData.jl")

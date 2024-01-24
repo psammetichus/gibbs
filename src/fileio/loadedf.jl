@@ -1,11 +1,8 @@
-module EEGIO
-
 import EDFPlus
 import JLD
 using Logging
-using ..EEGStruct
 
-export loadEEGFromEDF, loadEEGFromJLD, convertDirectory!
+
 
 const trodereplacements = Dict(
     "T3" => "T7",
@@ -76,5 +73,3 @@ function loadEEGfromJLD(filename :: String)
 end
 
 end #convertDirectory!
-
-end #module

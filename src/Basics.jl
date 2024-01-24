@@ -1,6 +1,6 @@
-module Basics
+module Gibbs
 
-export Signal, RMat, spectralEdge
+
 
 Signal = Vector{Float64}
 

@@ -1,6 +1,3 @@
-module Filtering
-
-using ..EEGStruct
 using DSP
 
 function prepareFilter(bpass :: Tuple{Float64, Float64}, Fs, taps=64)
@@ -31,5 +28,3 @@ function eegIirFilter!(eeg :: EEG, bpass)
     end
 end
 
-
-end #module

@@ -19,9 +19,7 @@
 #
 #
 
-module Trodes 
 
-export Electrode, whichSide, ifcn_electrodes
 
 struct Electrode
   name :: String
@@ -40,20 +38,20 @@ function whichSide(etrode ::Electrode)
   end #if
 end #func
 
-const tenpctDeg = 0.1*180
+tenpctDeg = 0.1*180
 
-const tenUp = 90-tenpctDeg
+tenUp = 90-tenpctDeg
 
-const twenpctDeg = 0.2 * 180
+twenpctDeg = 0.2 * 180
 
-const twenDown = 0+twenpctDeg
+twenDown = 0+twenpctDeg
 
 # these are derived as the intersections between the circles F7-Fz-F8 and
 # Fp1-C3-O1 (and analogously on the right and in the parietal) since the two
 # definitions from the IFCN recommendations are not the same point
-const threefourth = 49.52
+threefourth = 49.52
 
-const threefourphi = 40.48
+threefourphi = 40.48
 
 
 # circle defined by Fp1, C3, O1 will mark F3 and P3
@@ -88,5 +86,3 @@ const ifcn_electrodes = [
        Electrode("O2", 	(tenUp,		+180 - tenpctDeg))
 	]
        
-
-end #module 

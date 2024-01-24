@@ -1,5 +1,3 @@
-module SOBI
-
 using LinearAlgebra
 using Statistics
 using Logging
@@ -68,6 +66,3 @@ function estTimeDelayedCov(X :: Array{Float64,2}, lags=100)
   end
   return M
 end
-
-
-end #module
