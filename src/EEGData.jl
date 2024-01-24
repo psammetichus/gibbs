@@ -14,15 +14,15 @@ struct Annotation
 end #Annotation struct
   
 mutable struct EEG
-  signals :: Array{Signal,2} #nsamples × mchans
+  signals :: Array{Float64,2} #nsamples × mchans
   trodes :: Array{String} #m chans
   Fs :: Float64
   annots :: Vector{Annotation}
   length :: Int64
 end #EEG struct
 
-function EEG(signals, Fs, annots)
-	EEG(signals, ifcn_electrodes, Fs, annots, size(signals)[1])
+function EEG(signals, trodes, Fs, annots)
+	EEG(signals, trodes, Fs, annots, size(signals)[1])
 end #function 
 
 

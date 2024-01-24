@@ -32,13 +32,16 @@ function fixname!(signame :: String)
 end #fixname!
 
 
+# only adds first 30 channels; need to fix
+
 function loadEEGFromEDF(filename :: String)
     edfh = EDFPlus.loadfile(filename)
-    signals = Dict([fixname!(edfh.signalparam[i].label) => EDFPlus.physicalchanneldata(edfh,i) for i in 1:30])
+    names = [fixname!(edfh.signalparam[i].label) for i in 1:30]
+    signals = hcat( [EDFPlus.physicalchanneldata(edfh,i) for i in 1:30] )
     rawAnnots = append!(edfh.annotations...)
     annots = [Annotation(ann.onset, 0.0, ann.annotation[1], ann.annotation[2]) for ann in rawAnnots]
     Fs = EDFPlus.samplerate(edfh, 2) # assumption that the sampling rate is the same on all channels; avoid channel 1 in case annotation
-    myEEG = EEG(signals, Fs, annots)
+    myEEG = EEG(signals, names, Fs, annots)
     EDFPlus.closefile!(edfh)
     return myEEG
 end #loadEEG
