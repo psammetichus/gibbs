@@ -18,8 +18,8 @@ end
 
 function dataIirFilter(data, bpass, Fs, order=2)
     l,h = bpass
-    zpg = analogfilter(Bandpass(l,h; Fs=Fs), Butterworth(order/2))
-    return filt(data, zpg)
+    zpg = analogfilter(Bandpass(l,h; fs=Fs), Butterworth(div(order, 2)))
+    return filt(zpg, data)
 end
 
 function eegIirFilter!(eeg :: EEG, bpass)
