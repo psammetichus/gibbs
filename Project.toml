@@ -3,17 +3,3 @@ uuid = "c362587e-f337-4b36-af83-51aad0999083"
 authors = ["Tyson Burghardt <tyson@uncountable.org>"]
 version = "0.1.0"
 
-[deps]
-DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
-Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
-EDFPlus = "582d7a84-78fd-59ab-a7bb-47fc6b175004"
-JLD = "4138dd39-2aa7-5051-a626-17a0bb65d9c8"
-LegendrePolynomials = "3db4a2ba-fc88-11e8-3e01-49c72059a882"
-LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
-Match = "7eb4fadd-790c-5f42-8a69-bfa0b872bfbf"
-SQLite = "0aa819cd-b072-5ff4-a722-6bc24af294d9"
-Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
-DSP
-Peaks
-BasicInterpolators
-Diagonalizations
