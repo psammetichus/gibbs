@@ -18,7 +18,7 @@ end
 
 function dataIirFilter(data, bpass, Fs, order=2)
     l,h = bpass
-    zpg = analogfilter(Bandpass(l,h; fs=Fs), Butterworth(div(order, 2)))
+    zpg = digitalfilter(Bandpass(l,h; fs=Fs), Butterworth(div(order, 2)))
     return filt(zpg, data)
 end
 
