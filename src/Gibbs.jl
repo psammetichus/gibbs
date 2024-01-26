@@ -28,5 +28,6 @@ export findSymbol, pentropy
 include("transforms/hilbertHuang.jl")
 export emd, hilbertHuang
 
-
+include("fileio/eegcsv.jl")
+export loadEEGFrameFromCSV, saveEEGFrameAsCSV
 end #module
