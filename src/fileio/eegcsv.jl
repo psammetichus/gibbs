@@ -1,7 +1,7 @@
 function loadEEGFrameFromCSV(filename :: String)
     return EEGFrame(
         CSV.read(filename, DataFrame; delim=' '),
-        DataFrame(["Annotations"]), #empty annotations dataframe
+        DataFrame("Annotations" => []), #empty annotations dataframe
         256 #default Fs
     )
 end #function
