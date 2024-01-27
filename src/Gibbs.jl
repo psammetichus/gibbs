@@ -14,7 +14,7 @@ include("bss/sobi.jl")
 export sobi
 
 include("fileio/eegJLD.jl")
-export saveAsJLD, loadJLD,
+export saveAsJLD, loadJLD
 
 include("fileio/loadedf.jl")
 export loadEEGFromEDF, loadEEGFromJLD, convertDirectory!
