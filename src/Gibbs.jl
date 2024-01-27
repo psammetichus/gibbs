@@ -32,7 +32,7 @@ include("fileio/loadedf.jl")
 export loadEEGFromEDF, loadEEGFromJLD, convertDirectory!
 
 include("transforms/filter.jl")
-export eegFirFilter!, eegIirFilter!
+export eegFirFilter!, eegIirFilter!, eegFirFilter, eegIirFilter
 
 include("entropy/pentropy.jl")
 export findSymbol, pentropy
