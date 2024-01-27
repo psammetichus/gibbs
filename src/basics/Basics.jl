@@ -6,7 +6,8 @@ RMat = Array{Float64,2}
 function spectralEdge(s :: Signal, Fs :: Float64, overlap :: Int64, width :: Int64, windower, k=0.95)
     ll = length(s)
     lls = zeros(ll - overlap)
-    while i < ll-overlap
+    i = 1
+    while i < ll - overlap
         segment = windower(s[i:i+width])
         ffs = rfft(segment)
         ssum = 0.0
