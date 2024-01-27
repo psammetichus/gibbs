@@ -1,7 +1,3 @@
-module Gibbs
-
-
-
 Signal = Vector{Float64}
 
 RMat = Array{Float64,2}
@@ -26,5 +22,3 @@ function spectralEdge(s :: Signal, Fs :: Float64, overlap :: Int64, width :: Int
     end
     return lls
 end
-
-end #module
