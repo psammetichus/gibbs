@@ -1,5 +1,3 @@
-using DSP
-
 function prepareFilter(bpass :: Tuple{Float64, Float64}, Fs, taps=64)
     l,h = bpass
     return remez(taps, [ (0,l) => 0.0, (l+0.05,h-0.05) => 1.0, (h, Fs/2) => 0.0 ], Hz=Fs )

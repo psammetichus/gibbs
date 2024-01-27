@@ -1,9 +1,3 @@
-using LinearAlgebra
-using Statistics
-using Logging
-using Diagonalizations
-
-
 # X is an m × N matrix (N is number of samples, m is number of sensors)
 # A is the mixing matrix, n × m, that maps the matrix of independent sources 
 # (S ∈ R^n × N) to X (along with additive noise)

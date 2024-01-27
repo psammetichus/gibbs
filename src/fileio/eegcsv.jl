@@ -1,6 +1,3 @@
-using CSV
-using DataFrames
-
 function loadEEGFrameFromCSV(filename :: String)
     return EEGFrame(
         CSV.read(filename, DataFrame; delim=' '),

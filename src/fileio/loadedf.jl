@@ -1,9 +1,3 @@
-import EDFPlus
-import JLD
-using Logging
-
-
-
 const trodereplacements = Dict(
     "T3" => "T7",
     "T4" => "T8",

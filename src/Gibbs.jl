@@ -1,6 +1,18 @@
 module Gibbs
 
 
+using DSP
+using Diagonalizations
+using DataFrames
+using LinearAlgebra
+using Statistics
+using Logging
+using EDFPlus
+using JLD
+using Peaks
+using BasicInterpolators
+using CSV
+
 include("basics/Basics.jl")
 export Signal, RMat, spectralEdge
 
