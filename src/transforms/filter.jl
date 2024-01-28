@@ -4,8 +4,8 @@ function prepareFilter(bpass :: Tuple{Float64, Float64}, Fs, taps=64)
 end
 
 function eegFirFilter(data :: Array{Float64,1}, bpass, Fs, taps=64)
-    zpg = prepareFilter(bpass, Fs, taps)
-    return filt(data, zpg)
+    coeffs = prepareFilter(bpass, Fs, taps)
+    return filt(coeffs, data)
 end
 
 function eegFirFilter!(eeg :: EEG, bpass, taps=64)
