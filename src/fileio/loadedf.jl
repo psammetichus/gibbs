@@ -27,7 +27,6 @@ end #fixname!
 
 function loadEEGFromEDF(filename :: String)
     edfh = EDFPlus.loadfile(filename)
-    nchans = edfh.channelcount
     signalchannels = []
 	names = []
 	for (i, chan) in enumerate(edfh.signalparam)
