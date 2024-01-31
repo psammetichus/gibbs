@@ -79,7 +79,7 @@ end #hasData
 function hasModel(f :: FOOOF) :: Bool
   if isnothing(f.attrs)
     return false
-  else if all(isnan, f.attrs.aperiodicParams)
+  elseif all(isnan, f.attrs.aperiodicParams)
     return false
   else
     return true
@@ -103,3 +103,4 @@ function resetDataResults(f::FOOOF)
 # the python code can reset either the freqs, the spectrum, or the results
 # and this is great but it means all sorts of stupid sentinel checking
 # could refactor attrs into these three types
+end #func
