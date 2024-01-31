@@ -29,3 +29,12 @@ function expoFittingFunc(xs :: Vector{Float64}, params :: Tuple{Float64,Float64,
 end #func
 
 
+function expoNoKneeFittingFunc(xs :: Vector{Float64}, params :: Tuple{Float64,Float64,Float64})
+    ys = zero(xs)
+
+    offset, expnt = params
+
+    ys = ys .+ (offset .- log10.(xs.^expnt))
+
+    return ys
+end #func

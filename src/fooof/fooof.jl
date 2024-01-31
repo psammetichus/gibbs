@@ -59,7 +59,7 @@ function newFOOOF(  pkWidLim :: Tuple{Float64,Float64} = (0.5, 12.0),
                     apMode :: Symbol = :fixed )
 
     return FOOOF(pkWidLim, maxNP, minPkHt, pkThresh, apMode,
-                 0.025, (nothing,0,nothing), nothing, 1.0, 0.75, []
+                 0.025, (nothing,0,nothing), nothing, 1.0, 0.75, [],
                  1.5, 5000, :MAE, false, false, nothing)
 end # func
 

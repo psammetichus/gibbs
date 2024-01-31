@@ -12,6 +12,8 @@ using JLD
 using Peaks
 using BasicInterpolators
 using CSV
+using StatsBase
+using LsqFit
 
 include("basics/Basics.jl")
 export Signal, RMat, spectralEdge
@@ -42,4 +44,8 @@ export emd, hilbertHuang
 
 include("fileio/eegcsv.jl")
 export loadEEGFrameFromCSV, saveEEGFrameAsCSV
+
+#include("fooof/fooof.jl")
+
+
 end #module
