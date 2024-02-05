@@ -84,3 +84,12 @@ function getApFunc(apMode)
     end #if
 end #func
 
+function getPEFunc(perMode)
+    if peMode == "gaussian"
+        return gaussianFittingFunc
+    else
+        @error "Periodic mode not understood"
+    end #if
+end #func
+
+
