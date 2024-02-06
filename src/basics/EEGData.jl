@@ -6,13 +6,17 @@ struct Annotation
 end #Annotation struct
   
 mutable struct EEG
-  signals :: Array{Signal,2} #nsamples × mchans
+  signals :: Array{Float64,2} #nsamples × mchans
   trodes :: Array{String} #m chans
   Fs :: Float64
   annots :: Vector{Annotation}
-  procSignals :: Dict{String, Signal}
   length :: Int64
 end #EEG struct
+
+function EEG(signals, trodes, Fs, annots)
+	EEG(signals, trodes, Fs, annots, size(signals)[1])
+end #function 
+
 
 struct EEGFrame
   signals :: DataFrame
@@ -40,4 +44,15 @@ mutable struct Subject
 end
 
 function getSignal(eeg :: EEG, trode :: String)
+    for (i, name) in enumerate(eeg.trodes)
+        if name == trode
+            return eeg.signals[:, i]
+        end #if
+    end #for
+    return nothing
 end #function
+
+function getSignal(eeg :: EEG, chan :: Int64)
+    return eeg.signals[:,chan]
+end #function
+

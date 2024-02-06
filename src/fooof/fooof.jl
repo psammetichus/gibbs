@@ -59,7 +59,7 @@ function newFOOOF(  pkWidLim :: Tuple{Float64,Float64} = (0.5, 12.0),
                     apMode :: Symbol = :fixed )
 
     return FOOOF(pkWidLim, maxNP, minPkHt, pkThresh, apMode,
-                 0.025, (nothing,0,nothing), nothing, 1.0, 0.75, []
+                 0.025, (nothing,0,nothing), nothing, 1.0, 0.75, [],
                  1.5, 5000, :MAE, false, false, nothing)
 end # func
 
@@ -79,7 +79,7 @@ end #hasData
 function hasModel(f :: FOOOF) :: Bool
   if isnothing(f.attrs)
     return false
-  else if all(isnan, f.attrs.aperiodicParams)
+  elseif all(isnan, f.attrs.aperiodicParams)
     return false
   else
     return true
@@ -103,3 +103,4 @@ function resetDataResults(f::FOOOF)
 # the python code can reset either the freqs, the spectrum, or the results
 # and this is great but it means all sorts of stupid sentinel checking
 # could refactor attrs into these three types
+end #func

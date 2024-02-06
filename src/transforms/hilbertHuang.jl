@@ -1,7 +1,3 @@
-using Peaks
-using BasicInterpolators
-using DSP
-
 # using stop criteria as outlined in Rilling, G., Flandrin, P., & Goncalves, P.
 # (2003, June). On empirical mode decomposition and its algorithms. In
 # IEEE-EURASIP workshop on nonlinear signal and image processing (Vol. 3, No. 3,
