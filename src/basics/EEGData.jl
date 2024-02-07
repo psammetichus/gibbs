@@ -71,6 +71,24 @@ function getSignal(eeg :: EEG, chan :: Int64)
     return eeg.signals[:,chan]
 end #function
 
+function getSignalDiff(eeg :: EEG, trodeOne :: String, trodeTwo :: String)
+    chanOne = findSignalChanNum(eeg, trodeOne)
+    chanTwo = findSignalChanNum(eeg, trodeTwo)
+    return eeg.signals[:,chanOne] - eeg.signals[:, chanTwo]
+end #function
+
+function getSignalAvg(eeg :: EEG, trode :: String)
+    avgR = makeAverageRef(eeg)
+    sig = getSignal(trode)
+    return sig - avgR
+end
+
+function getSignalRefF(eeg :: EEG, trode :: String, refF)
+    sig = getSignal(trode)
+    refSig = refF(eeg)
+    return sig - refSig
+end
+
 function putSignal!(eeg :: EEG, trode :: String, newSignal)
     if length(newSignal) != eeg.length
       @error "Wrong length"

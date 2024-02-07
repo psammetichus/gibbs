@@ -22,7 +22,8 @@ include("basics/electrodes.jl")
 export ifcn_electrodes, Electrode, whichSide
 
 include("basics/EEGData.jl")
-export Annotation, EEG, EEGFrame, convertToDataFrame, getSignal, putSignal!, signalCount
+export Annotation, EEG, EEGFrame, convertToDataFrame, getSignal, putSignal!, signalCount,
+       getSignalDiff, getSignalAvg, getSignalRefF
 
 include("bss/sobi.jl")
 export sobi
