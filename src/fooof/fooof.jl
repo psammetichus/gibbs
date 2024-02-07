@@ -1,6 +1,6 @@
 const RMat = Array{Float64,2}
 
-struct FOOOF
+mutable struct FOOOF
     peakWidthLimits :: Tuple{Float64,Float64}
     maxNPeaks :: Union{Int,Nothing}
     minPeakHeight :: Float64
@@ -20,7 +20,7 @@ struct FOOOF
     attrs :: Union{FOOOFAttrs,Nothing}
 end
 
-struct FOOOFAttrs
+mutable struct FOOOFAttrs
     freqs :: Vector{Float64}
     powerSpectrum :: Vector{Float64} #log10 scale
     freqRange :: Tuple{Float64,Float64}
@@ -37,7 +37,7 @@ struct FOOOFFreqs
     freqRes :: Float64
 end
 
-struct FOOOFResults
+mutable struct FOOOFResults
     fooofedSpectrum :: Vector{Float64}
     aperiodicParams :: Vector{Float64}
     peakParams :: RMat

@@ -5,18 +5,21 @@ function fit(specModel, freqs, powerSpectrum, freqRange=nothing)
     #fit the aperiodic component
     aperiodicParams = robustApFit(freqs, powerSpectrum)
     apFit = genAperiodic(freqs, aperiodicParams)
+    spectrumFlat = powerSpectrum - apFit
+    gaussianParams = fitPeaks(spectrumFlat)
+
 
 end #func
 
 
-function robustApFit(freqs, powerSpectrum, apPcntleThresh, apMode, apBounds)
+function robustApFit(fooof :: FOOOF)
 
     #initial simple fit
-    popt = simpleApFit(freqs, powerSpectrum)
-    initialFit = genAperiodic(freqs, popt)
+    popt = simpleApFit(fooof.attrs.freqs, fooof.attrs.powerSpectrum)
+    initialFit = genAperiodic(fooof.attrs.freqs, popt)
 
     #flatten power spectrum based on initial aperiodic fit
-    flatspec = powerSpectrum - initialFit
+    flatspec = fooof.attrs.powerSpectrum - initialFit
 
     #flatten outliers
     flatspec[flatspec .< 0] = 0
@@ -24,36 +27,35 @@ function robustApFit(freqs, powerSpectrum, apPcntleThresh, apMode, apBounds)
     #use percentile threshold
     pcntleThresh = percentile(flatspec, apPcntleThresh)
     pcntleMask = flatspec .≤ pcntleThresh
-    freqsIgnore = freqs[pcntleMask]
-    spectIgnore = powerSpectrum[pcntleMask]
+    freqsIgnore = fooof.attrs.freqs[pcntleMask]
+    spectIgnore = fooof.attrs.powerSpectrum[pcntleMask]
 
     #get bounds for aperiodic fitting, dropping knee if not set to fit it
     #don't understand this
-    apBounds = (apMode == apKnee) ? apBounds : [bounds[1:2:end] for bound in apBounds]
+    apBounds = (apMode == apKnee) ? fooof.apBounds : [bounds[1:2:end] for bound in fooof.apBounds]
 
     apModel(x,p) = getApFunc(apMode)
-    return curve_fit(model, freqs, powerSpectrum, guess)
+    return curve_fit(apModel, fooof.attrs.freqs, fooof.attrs.powerSpectrum, guess)
 end #func
 
 
-function simpleApFit(freqs, powerSpectrum, apGuess, apBounds)
+function simpleApFit(fooof :: FOOOF, reqs)
 
     #powerSpectrum is in log10 scale
     #get guess params or calc from data as needed
 
-    offGuess = [powerSpectrum[1] if ! apGuess[1] else apGuess[1] end ]
-    kneeGuess = ( apMode == apKnee) ? apGuess[2] : []
-    expGuess = apGuess[3] ? 
-                [ abs(powerSpectrum[end]) - abs(powerSpectrum[1]) /
-                (log10(freqs[end]) - log10(freqs[1]))]
-                : apGuess[3]
-    apBounds = (apMode == apKnee) ? apBounds : [bounds[1:2:end] for bound in apBounds]
-    
+    offGuess = [fooof.attrs.powerSpectrum[1] if ! fooof.apGuess[1] else fooof.apGuess[1] end ]
+    kneeGuess = ( fooof.apMode == apKnee) ? fooof.apGuess[2] : []
+    expGuess = fooof.apGuess[3] ? 
+                [ abs(fooof.attrs.powerSpectrum[end]) - abs(fooof.attrs.powerSpectrum[1]) /
+                (log10(fooof.attrs.freqs[end]) - log10(fooof.attrs.freqs[1]))]
+                : fooof.apGuess[3]
+    apBounds = (fooof.apMode == apKnee) ? fooof.apBounds : [bounds[1:2:end] for bound in fooof.apBounds]
     guess = vcat(offGuess, kneeGuess, expGuess)
     
     #LsqFit
     apModel(x,p) = getApFunc(apMode)
-    return curve_fit(model, freqs, powerSpectrum, guess)
+    return curve_fit(apModel, fooof.attrs.freqs, fooof.attrs.powerSpectrum, guess)
     
 
 end #func
@@ -92,4 +94,21 @@ function getPEFunc(perMode)
     end #if
 end #func
 
+function fitPeaks(fooof :: FOOOF, flatIter)
+    guess = zeros(0,3)
+    while length(guess) < fooof.maxNPeaks
+        maxInd = argmax(flatIter)
+        maxHeight = flatIter[maxInd]
 
+        if maxHeight <= fooof.peakThreshold * std(flatIter)
+            break
+        end #if
+
+        guessFreq = fooof.freqs[maxInd]
+        guessHeight = maxHeight
+        if guessHeight > fooof.minPeakHeight
+            break
+        end #if
+
+        halfHeight = 0.5 * maxHeight
+        leInd = 
