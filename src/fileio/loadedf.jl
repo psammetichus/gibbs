@@ -43,7 +43,8 @@ function loadEEGFromEDF(filename :: String)
     end #for
     rawAnnots = append!(edfh.annotations...)
     annots = [Annotation(ann.onset, 0.0, ann.annotation[1], ann.annotation[2]) for ann in rawAnnots]
-    myEEG = EEG(signals, names, Fs, annots, l)
+    eeglength = size(signals, 1)
+    myEEG = EEG(signals, names, Fs, annots, eeglength)
     EDFPlus.closefile!(edfh)
     closefile!(edfh)
     return myEEG

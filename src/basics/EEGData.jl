@@ -43,16 +43,63 @@ mutable struct Subject
   gender :: String
 end
 
+function findSignalChanNum(eeg :: EEG, trode :: String)
+  for (i, name) in enumerate(eeg.trodes)
+    if name == trode
+      return i
+    end #if
+  end #for
+  
+  #default
+  return nothing
+end #function
+
+function signalCount(eeg :: EEG)
+  return size(eeg.signals, 2)
+end #function
+
 function getSignal(eeg :: EEG, trode :: String)
-    for (i, name) in enumerate(eeg.trodes)
-        if name == trode
-            return eeg.signals[:, i]
-        end #if
-    end #for
-    return nothing
+    i = findSignalChanNum(eeg, trode)
+    if ! isnothing(i)
+      return getSignal(eeg, i)
+    else
+      return nothing
+    end #if
 end #function
 
 function getSignal(eeg :: EEG, chan :: Int64)
     return eeg.signals[:,chan]
 end #function
+
+function putSignal!(eeg :: EEG, trode :: String, newSignal)
+    if length(newSignal) != eeg.length
+      @error "Wrong length"
+      return eeg
+    end #if
+
+    i = findSignalChanNum(eeg, trode)
+    if !isnothing(i)
+      putSignal!(eeg, i, newSignal)
+      return eeg
+    else
+      return nothing
+    end #if
+end #function
+
+function putSignal!(eeg :: EEG, chan :: Int64, newSignal :: Vector{Float64})
+    if length(newSignal) != eeg.length
+      @error "Wrong length"
+      return eeg
+    end #if
+
+    if i > signalCount(eeg)
+      @error "Out of bounds channel number"
+      return eeg
+    end #for
+
+    eeg.signals[:,i] = newSignal 
+    return eeg
+end #function
+
+
 

@@ -22,7 +22,7 @@ include("basics/electrodes.jl")
 export ifcn_electrodes, Electrode, whichSide
 
 include("basics/EEGData.jl")
-export Annotation, EEG, EEGFrame, convertToDataFrame, getSignal
+export Annotation, EEG, EEGFrame, convertToDataFrame, getSignal, putSignal!, signalCount
 
 include("bss/sobi.jl")
 export sobi
@@ -33,11 +33,17 @@ export saveAsJLD, loadJLD
 include("fileio/loadedf.jl")
 export loadEEGFromEDF, loadEEGFromJLD, convertDirectory!
 
+include("fileio/bacav.jl")
+export exportTSV
+
 include("transforms/filter.jl")
-export eegFirFilter!, eegIirFilter!, eegFirFilter, eegIirFilter
+export eegFirFilter!, eegIirFilter!, eegFirFilter, eegIirFilter, notch
 
 include("entropy/pentropy.jl")
 export findSymbol, pentropy
+
+include("basics/average.jl")
+export makeAvgRef, makeAvgRef!
 
 include("transforms/hilbertHuang.jl")
 export emd, hilbertHuang
