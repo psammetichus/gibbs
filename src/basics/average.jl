@@ -1,29 +1,24 @@
+avgTrodes = ["Fp1", "Fp2", "F7", "F8", "T7", "T8", "P7", "P8",
+            "O1", "O2", "F3", "F4", "C3", "C4", "P3", "P4", "Fz", "Cz", "Pz"]
+
 function makeAvgRef(eeg)
-  trodes = ["Fp1", "Fp2", "F7", "F8", "T7", "T8", "P7", "P8",
-            "O1", "O2", "F3", "F4", "C3", "C4", "P3", "P4"]
-  ntrodes = length(trodes)
-  try
-    avgsig = zeros(eeg.length)
-    sigs = hcat([getSignal[t] for t in trodes])
-    for i in 1:eeg.length
-      avgsig[i] = sum(sigs[i,:])/ntrodes
-    end #for
-  catch e
-    #todo
-  end #try
+  ntrodes = length(avgTrodes)
+  avgsig = zeros(eeg.length)
+  sigs = hcat([getSignal[t] for t in avgTrodes])
+  for i in 1:eeg.length
+    avgsig[i] = sum(sigs[i,:])/ntrodes
+  end #for
 
   return avgsig
 end #function
 
 function makeAvgRef!(eeg)
-  trodes = ["Fp1", "Fp2", "F7", "F8", "T7", "T8", "P7", "P8",
-            "O1", "O2", "F3", "F4", "C3", "C4", "P3", "P4"]
-  ntrodes = length(trodes)
+  ntrodes = length(avgTrodes)
   avgRef = makeAvgRef(eeg)
-  for t in trodes
+  for t in avgTrodes
     ss = getSignal(eeg, t)
     ss = ss - avgRef
-    putSignal!(eeg, t)
+    putSignal!(eeg, t, ss)
   end #for
 end #function
 
