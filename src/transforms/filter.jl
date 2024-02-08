@@ -26,3 +26,8 @@ function eegIirFilter!(eeg :: EEG, bpass)
     end
 end
 
+function notch(data :: Array{Float64,1}, Fs, freq=60.0)
+    f = iirnotch(freq, 1.0; fs=512)
+    return filt(f, data)
+end #function
+
