@@ -38,7 +38,7 @@ include("fileio/loadedf.jl")
 export loadEEGFromEDF, loadEEGFromJLD, convertDirectory!
 
 include("fileio/bacav.jl")
-export exportTSV
+export exportBacAv
 
 include("transforms/filter.jl")
 export eegFirFilter!, eegIirFilter!, eegFirFilter, eegIirFilter, notch

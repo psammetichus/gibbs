@@ -78,13 +78,13 @@ function getSignalDiff(eeg :: EEG, trodeOne :: String, trodeTwo :: String)
 end #function
 
 function getSignalAvg(eeg :: EEG, trode :: String)
-    avgR = makeAverageRef(eeg)
-    sig = getSignal(trode)
+    avgR = makeAvgRef(eeg)
+    sig = getSignal(eeg, trode)
     return sig - avgR
 end
 
 function getSignalRefF(eeg :: EEG, trode :: String, refF)
-    sig = getSignal(trode)
+    sig = getSignal(eeg, trode)
     refSig = refF(eeg)
     return sig - refSig
 end

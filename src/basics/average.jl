@@ -4,7 +4,10 @@ avgTrodes = ["Fp1", "Fp2", "F7", "F8", "T7", "T8", "P7", "P8",
 function makeAvgRef(eeg)
   ntrodes = length(avgTrodes)
   avgsig = zeros(eeg.length)
-  sigs = hcat([getSignal[t] for t in avgTrodes])
+  sigs = zeros(eeg.length, ntrodes)
+  for (j,trode) ∈ enumerate(avgTrodes)
+    sigs[:,j] = getSignal(eeg,trode)
+  end #for
   for i in 1:eeg.length
     avgsig[i] = sum(sigs[i,:])/ntrodes
   end #for
