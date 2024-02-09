@@ -2,6 +2,7 @@ module Gibbs
 
 
 using DSP
+using FFTW
 using Diagonalizations
 using DataFrames
 using LinearAlgebra
