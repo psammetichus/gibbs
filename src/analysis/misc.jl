@@ -23,17 +23,17 @@ end #func
 
 function lineLength(s :: Vector{Float64})
     l = 0
-    s = length(s)
-    for i ∈ 1:s-1
+    p = length(s)
+    for i ∈ 1:p-1
         l += abs(s[i+1]-s[i])
     end #for
     return l
 end #func
 
-function lineLengthNorm(s :: Vector{Float64}, N, K=1)
+function lineLengthNorm(s :: Vector{Float64}, N, K=N)
     ll = zeros(length(s)-N)
-    for n ∈ N:length(s)
-        ll[n-N+1] = lineLength(s[n-N+1:n])/K
+    for n ∈ N+1:length(s)
+        ll[n-N] = lineLength(s[n-N:n])/K
     end #for
     return ll
 end

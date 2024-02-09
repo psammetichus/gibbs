@@ -25,7 +25,7 @@ export Annotation, EEG, EEGFrame, convertToDataFrame, getSignal, putSignal!, sig
        getSignalDiff, getSignalAvg, getSignalRefF, filterSignal!, linearComboSignal
 
 include("analysis/misc.jl")
-export spectralEdge
+export spectralEdge, lineLength, lineLengthNorm
 
 include("analysis/sobi.jl")
 export sobi
