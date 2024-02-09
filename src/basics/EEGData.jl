@@ -119,5 +119,24 @@ function putSignal!(eeg :: EEG, chan :: Int64, newSignal :: Vector{Float64})
     return eeg
 end #function
 
+function filterSignal!(eeg :: EEG, selector :: String, f)
+  s = getSignal(eeg, selector)
+  putSignal!(eeg, selector, f(s))
+end #function
 
+function linearComboSignal(eeg :: EEG, weights :: Vector{Float64})
+  if length(weights) != signalCount(eeg)
+    error("weights must equal signals")
+  end #if
+
+  res = zeros(eeg.length)
+
+  for i ∈ 1:signalCount(eeg)
+    if weights[i] == 0.0
+      break #skip
+    end #if
+    res += weights[i] * getSignal(eeg, i)
+  end #for
+  return res
+end #func
 
