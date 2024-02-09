@@ -1,9 +1,4 @@
-Signal = Vector{Float64}
-
-RMat = Array{Float64,2}
-
-
-function spectralEdge(s :: Signal, Fs :: Float64, overlap :: Int64, width :: Int64, windower, k=0.95)
+function spectralEdge(s :: Vector{Float64}, Fs :: Float64, overlap :: Int64, width :: Int64, windower, k=0.95)
     ll = length(s)
     lls = zeros(ll - overlap)
     i = 1
@@ -22,4 +17,6 @@ function spectralEdge(s :: Signal, Fs :: Float64, overlap :: Int64, width :: Int
         i += overlap
     end
     return lls
-end
+end #func
+
+
