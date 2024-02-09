@@ -19,4 +19,21 @@ function spectralEdge(s :: Vector{Float64}, Fs :: Float64, overlap :: Int64, wid
     return lls
 end #func
 
+# line length functions from Line length: An efficient feature for seizure onset detection, Esteller et al, 2001
 
+function lineLength(s :: Vector{Float64})
+    l = 0
+    s = length(s)
+    for i ∈ 1:s-1
+        l += abs(s[i+1]-s[i])
+    end #for
+    return l
+end #func
+
+function lineLengthNorm(s :: Vector{Float64}, N, K=1)
+    ll = zeros(length(s)-N)
+    for n ∈ N:length(s)
+        ll[n-N+1] = lineLength(s[n-N+1:n])/K
+    end #for
+    return ll
+end
