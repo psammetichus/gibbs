@@ -17,6 +17,38 @@ function EEG(signals, trodes, Fs, annots)
 	EEG(signals, trodes, Fs, annots, size(signals)[1])
 end #function 
 
+mutable struct EegGroup
+  eegs :: Vector{EEG}
+  offsets :: Vector{Float64}
+end #struct
+
+mutable struct AnnotationGroup
+  onsets :: Vector{Float64}
+  durations :: Vector{Float64}
+  names :: Vector{String}
+  descs :: Vector{String}
+  len :: Int64
+end
+
+function addAnnotation!(ag :: AnnotationGroup, ann :: Annotation)
+  push!(ag.onsets, ann.onset)
+  push!(ag.durations, ann.duration)
+  push!(ag.names, ann.name)
+  push!(ag.descs, ann.desc)
+end #func
+
+function getAnnotationByNum(ag :: AnnotationGroup, num :: Int64)
+  return Annotation(ag.onsets[num], ag.durations[num], ag.names[num], ag.descs[num])
+end #func
+
+function findAnnotations(ag :: AnnotationGroup, name :: String)
+  I = findall(x -> x == name, ag.names)
+  anns = []
+  for i in I
+    push!(anns, getAnnotationByNum(ag, i))
+  end #for
+  return anns
+end
 
 struct EEGFrame
   signals :: DataFrame
