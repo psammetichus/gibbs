@@ -23,7 +23,8 @@ export ifcn_electrodes, Electrode, whichSide
 
 include("basics/EEGData.jl")
 export Annotation, EEG, EEGFrame, convertToDataFrame, getSignal, putSignal!, signalCount,
-       getSignalDiff, getSignalAvg, getSignalRefF, filterSignal!, linearComboSignal
+       getSignalDiff, getSignalAvg, getSignalRefF, filterSignal!, linearComboSignal,
+       getAnnotationByNum, findAnnotations, addAnnotation!, AnnotationGroup, EegGroup
 
 include("analysis/misc.jl")
 export spectralEdge, lineLength, lineLengthNorm
