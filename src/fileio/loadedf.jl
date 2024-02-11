@@ -64,9 +64,4 @@ function convertDirectory!()
 
     end #for
 
-function loadEEGfromJLD(filename :: String)
-    f = JLD.loadfile(filename)
-    close(f)
-end
-
 end #convertDirectory!
