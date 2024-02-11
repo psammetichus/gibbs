@@ -9,7 +9,7 @@ function eegFirFilter(data :: Array{Float64,1}, bpass, Fs, taps=64)
 end
 
 function eegFirFilter!(eeg :: EEG, bpass, taps=64)
-    for i in 1:signalCount(eeg)
+    @threads for i in 1:signalCount(eeg)
         eeg.signals[:,i] = eegFirFilter(eeg.signals[:,i], bpass, eeg.Fs, taps)
     end
 end
@@ -21,7 +21,7 @@ function eegIirFilter(data :: Array{Float64,1}, bpass, Fs, order=2)
 end
 
 function eegIirFilter!(eeg :: EEG, bpass)
-    for i in 1:signalCount(eeg)
+    @threads for i in 1:signalCount(eeg)
         eeg.signals[:,i] = eegIirFilter(eeg.signals[:,i], bpass, eeg.Fs, taps)
     end
 end
