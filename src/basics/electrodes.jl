@@ -38,20 +38,20 @@ function whichSide(etrode ::Electrode)
   end #if
 end #func
 
-tenpctDeg = 0.1*180
+const tenpctDeg = 0.1*180
 
-tenUp = 90-tenpctDeg
+const tenUp = 90-tenpctDeg
 
-twenpctDeg = 0.2 * 180
+const twenpctDeg = 0.2 * 180
 
-twenDown = 0+twenpctDeg
+const twenDown = 0+twenpctDeg
 
 # these are derived as the intersections between the circles F7-Fz-F8 and
 # Fp1-C3-O1 (and analogously on the right and in the parietal) since the two
 # definitions from the IFCN recommendations are not the same point
-threefourth = 49.52
+const threefourth = 49.52
 
-threefourphi = 40.48
+const threefourphi = 40.48
 
 
 # circle defined by Fp1, C3, O1 will mark F3 and P3
