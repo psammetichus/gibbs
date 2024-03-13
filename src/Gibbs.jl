@@ -15,6 +15,7 @@ using BasicInterpolators
 using CSV
 using StatsBase
 using LsqFit
+using GLM
 using Base.Threads
 
 
@@ -31,6 +32,9 @@ export spectralEdge, lineLength, lineLengthNorm
 
 include("analysis/sobi.jl")
 export sobi
+
+#include("fractaldimension.jl")
+export katzFD, higuchiFD
 
 include("fileio/eegJLD.jl")
 export saveAsJLD, loadJLD
