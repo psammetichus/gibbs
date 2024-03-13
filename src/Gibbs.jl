@@ -33,7 +33,7 @@ export spectralEdge, lineLength, lineLengthNorm
 include("analysis/sobi.jl")
 export sobi
 
-#include("fractaldimension.jl")
+include("analysis/fractaldimension.jl")
 export katzFD, higuchiFD
 
 include("fileio/eegJLD.jl")
