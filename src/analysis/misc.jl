@@ -1,3 +1,7 @@
+"""
+calculates the vector of spectral edge frequencies parameterized by `k` of a signal windowed by `windower` with given
+width and overlap.
+"""
 function spectralEdge(s :: Vector{Float64}, Fs :: Float64, overlap :: Int64, width :: Int64, windower, k=0.95)
     ll = length(s)
     lls = zeros(ll - (width - overlap))
@@ -21,6 +25,7 @@ end #func
 
 # line length functions from Line length: An efficient feature for seizure onset detection, Esteller et al, 2001
 
+"calculates the line length of a signal (the sum of the absolute values of successive differences)"
 function lineLength(s :: Vector{Float64})
     l = 0
     p = length(s)
@@ -30,6 +35,7 @@ function lineLength(s :: Vector{Float64})
     return l
 end #func
 
+"calculates a vector of normalized line lengths parameterized by the size of each segment"
 function lineLengthNorm(s :: Vector{Float64}, N, K=N)
     ll = zeros(length(s)-N)
     for n ∈ N+1:length(s)

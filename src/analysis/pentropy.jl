@@ -15,6 +15,13 @@ function findSymbol(arr :: Vector{Float64}) :: UInt32
     return symbol
 end
 
+"""
+calculates the permutation entropy of a signal
+
+Segments of the signal are run through `findSymbol` to characterize
+symbols based on the order of successive differences and then
+calculating the entropy of the distribution of symbols
+"""
 function pentropy(arr :: Vector{Float64}, n :: Int64 = 3) :: Float64
     ll = length(arr)
     symbols = zeros(UInt32, ll-n+1)

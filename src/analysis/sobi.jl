@@ -1,6 +1,16 @@
-# X is an m × N matrix (N is number of samples, m is number of sensors)
-# A is the mixing matrix, n × m, that maps the matrix of independent sources 
-# (S ∈ R^n × N) to X (along with additive noise)
+"""
+takes a collection of signals and calculates independent sources based on
+second-order blind identification (SOBI). Algorithm taken from EEGLab but uses
+`Diagonalizations.jl` to perform the approximate joint diagonalization.
+
+# Arguments
+- X is an m × N matrix (N is number of samples, m is number of sensors)
+
+- A is the mixing matrix, n × m, that maps the matrix of independent sources to X along with
+additive noise
+
+- (S ∈ R^n × N) is the matrix of independent sources
+"""
 function sobi(X :: Array{Float64,2})
   m,N = size(X)
   n = m
@@ -31,6 +41,7 @@ function sobi(X :: Array{Float64,2})
   return A,S
 end #function
 
+"detrends a signal by subtracting the mean"
 function standardize(X :: Array{Float64,2}) :: Array{Float64,2}
   return X .- mean(X, dims=2)
 end
