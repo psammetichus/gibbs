@@ -195,11 +195,10 @@ function linearComboSignal(eeg :: EEG, weights :: Vector{Float64})
   return res
 end #func
 
-function isBounded(num :: Float64, intvl :: Interval)
-  
 
 const freqBands = [ (α , [8.0, 13.0]), (β, [13.0, 35.0]), (δ, [1.0, 4.0]), (θ, [4.0, 8.0]) (γ, [35.0, 70.0])]
 
+"returns the frequency band a given frequency is in, or `nothing`` if no matches"
 function freqBand(freq :: Float64)
   for (band, lower, upper) in global freqBands
     if freq ≥ lower & freq < upper
@@ -210,6 +209,10 @@ function freqBand(freq :: Float64)
   end #for
 end #function
 
+"""
+calculates the frequencies corresponding to a series of `rfft`-based coefficients
+and returns a dataframe
+"""
 function fourierFreqs(fourierCoeffs :: Vector{Float64}, Fs :: Float64)
   #assume from rfft, so all coeffs of positive freqs
   Nyq = Fs/2
