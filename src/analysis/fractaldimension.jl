@@ -8,7 +8,7 @@ function katzFD(t :: Vector{Float64})
     return log(n)/(log(n)+log(d/L))
 end #function
 
-#implemented based on Wikipedia fetched 2024-03-13
+#implemented based on Wikipedia fetched 2024-03-13 and the above
 
 function higuchiFD(y :: Vector{Float64}, kmax=10)
     L = zeros(kmax)
