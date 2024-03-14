@@ -195,10 +195,19 @@ function linearComboSignal(eeg :: EEG, weights :: Vector{Float64})
   return res
 end #func
 
+"tuples representing the common EEG frequency band names"
+const freqBands = [ (α , [8.0, 13.0]), 
+                    (β, [13.0, 35.0]), 
+                    (δ, [1.0, 4.0]), 
+                    (θ, [4.0, 8.0]), 
+                    (γ, [35.0, 70.0]) ]
 
-const freqBands = [ (α , [8.0, 13.0]), (β, [13.0, 35.0]), (δ, [1.0, 4.0]), (θ, [4.0, 8.0]) (γ, [35.0, 70.0])]
+"""
+returns the frequency band a given frequency is in, or `nothing`` if no matches
 
-"returns the frequency band a given frequency is in, or `nothing`` if no matches"
+assumes that the frequency bands are half-closed downward although this is technically
+not the case with α which is conventionally defined as a closed interval
+"""
 function freqBand(freq :: Float64)
   for (band, lower, upper) in global freqBands
     if freq ≥ lower & freq < upper
