@@ -25,7 +25,8 @@ export ifcn_electrodes, Electrode, whichSide
 include("basics/EEGData.jl")
 export Annotation, EEG, EEGFrame, convertToDataFrame, getSignal, putSignal!, signalCount,
        getSignalDiff, getSignalAvg, getSignalRefF, filterSignal!, linearComboSignal,
-       getAnnotationByNum, findAnnotations, addAnnotation!, AnnotationGroup, EegGroup
+       getAnnotationByNum, findAnnotations, addAnnotation!, AnnotationGroup, EegGroup, freqBands,
+       fourierFreqs
 
 include("analysis/misc.jl")
 export spectralEdge, lineLength, lineLengthNorm
