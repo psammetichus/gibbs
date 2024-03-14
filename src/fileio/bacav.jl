@@ -1,3 +1,7 @@
+"""
+exports a pair of signals from `eeg` named by `signame` and `emgname` and
+does so in a specific space-separated-value format accepted by the bacav codes
+"""
 function exportBacAv(filename :: String, eeg :: EEG, signame, emgname="EMG")
    eegsig = getSignalAvg(eeg, signame)
    emgsig = getSignalDiff(eeg, emgname*"1", emgname*"2")
