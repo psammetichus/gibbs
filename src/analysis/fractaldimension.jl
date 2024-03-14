@@ -22,5 +22,5 @@ function higuchiFD(y :: Vector{Float64}, kmax=10)
         L[k] = 1/k * sum(Lk)
     end #for k
     points = DataFrame(y = log.(L), x = log.(1:kmax))
-    return coef(lm(@formula(y ~ x), points).model)[2]
+    return -coef(lm(@formula(y ~ x), points).model)[2]
 end #function
