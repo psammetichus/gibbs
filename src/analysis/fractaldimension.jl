@@ -1,5 +1,9 @@
 #implemented based on A note on fractal dimensions of biomedical waveforms, B.S. Raghavendra∗, D. Narayana Dutt 2009
+"""
+calculates the fractal dimension of a signal using Katz's method
 
+Considered more accurate than `higuchiFD` for shorter signals
+"""
 function katzFD(t :: Vector{Float64})
     c = [t' ; (1:length(t))']
     n = length(t)-1
@@ -10,6 +14,11 @@ end #function
 
 #implemented based on Wikipedia fetched 2024-03-13 and the above
 
+"""
+calculates the fractal dimension of a signal using Higuchi's method
+
+This is considered more accurate for longer signals
+"""
 function higuchiFD(y :: Vector{Float64}, kmax=10)
     L = zeros(kmax)
     N = length(y)
