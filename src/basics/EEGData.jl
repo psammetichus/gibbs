@@ -196,11 +196,11 @@ function linearComboSignal(eeg :: EEG, weights :: Vector{Float64})
 end #func
 
 "tuples representing the common EEG frequency band names"
-const freqBands = [ (α , [8.0, 13.0]), 
-                    (β, [13.0, 35.0]), 
-                    (δ, [1.0, 4.0]), 
-                    (θ, [4.0, 8.0]), 
-                    (γ, [35.0, 70.0]) ]
+const freqBands = [ (:α , [8.0, 13.0]), 
+                    (:β, [13.0, 35.0]), 
+                    (:δ, [1.0, 4.0]), 
+                    (:θ, [4.0, 8.0]), 
+                    (:γ, [35.0, 70.0]) ]
 
 """
 returns the frequency band a given frequency is in, or `nothing`` if no matches
