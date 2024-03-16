@@ -209,7 +209,7 @@ assumes that the frequency bands are half-closed downward although this is techn
 not the case with α which is conventionally defined as a closed interval
 """
 function freqBand(freq :: Float64)
-  for (band, lower, upper) in global freqBands
+  for (band, lower, upper) in freqBands
     if freq ≥ lower & freq < upper
       return band
     end #if
