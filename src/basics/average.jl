@@ -6,7 +6,7 @@ function makeAvgRef(eeg :: EEG)
   ntrodes = length(avgTrodes)
   avgsig = zeros(eeg.length)
   sigs = zeros(eeg.length, ntrodes)
-  for (j,trode) ∈ enumerate(global avgTrodes)
+  for (j,trode) ∈ enumerate(avgTrodes)
     sigs[:,j] = getSignal(eeg,trode)
   end #for
   for i in 1:eeg.length
