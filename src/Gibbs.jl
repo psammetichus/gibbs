@@ -76,5 +76,9 @@ export loadEEGFrameFromCSV, saveEEGFrameAsCSV
 
 #include("fooof/fooof.jl")
 
+@info "loading DFA..."
+include("analysis/dfa.jl")
+export dfa
+
 
 end #module
