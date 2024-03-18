@@ -95,7 +95,7 @@ function dfa(x::AbstractArray{T};
              boxratio::Real = 2,
              integrated::Bool = false) where {T<:Real}
     if boxmax > boxmin
-        boxes = unique(int(boxratio.^[log(boxratio, boxmin):log(boxratio, boxmax)]))
+        boxes = unique(Int.(floor.(boxratio.^(log(boxratio, boxmin):log(boxratio, boxmax)))))
         if length(boxes) > 1
             if !integrated
                 x = integrate(x)
