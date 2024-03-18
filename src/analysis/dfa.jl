@@ -9,7 +9,7 @@
 #THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-function integrate{T<:Real}(x::AbstractArray{T})
+function integrate(x::AbstractArray{T}) where T<:Real
     N = length(x)
     y = zeros(N)
     sumx = 0.0
@@ -20,7 +20,7 @@ function integrate{T<:Real}(x::AbstractArray{T})
     return y
 end
 
-function integrate1{T<:Real}(x::AbstractArray{T})
+function integrate1(x::AbstractArray{T}) where T<:Real
     N = length(x)
     y = zeros(N)
     sumx = 0.0
@@ -33,18 +33,18 @@ function integrate1{T<:Real}(x::AbstractArray{T})
     return y
 end
 
-function polyfit{S<:Real, T<:Real}(x::AbstractArray{S},
-                                   y::AbstractArray{T},
-                                   order::Int = 1)
+function polyfit(x::AbstractArray{S},
+                 y::AbstractArray{T},
+                 order::Int = 1) where {S<:Real, T<:Real}
   A = [ float(x[i])^p for i = 1:length(x), p = 0:order ]
   return A \ y
 end
 
-function dfa{T<:Real}(x::AbstractArray{T},
-                      boxsize::Int;
-                      order::Int = 1,
-                      overlap::Real = 0.0,
-                      integrated::Bool = false)
+function dfa(x::AbstractArray{T},
+             boxsize::Int;
+             order::Int = 1,
+             overlap::Real = 0.0,
+             integrated::Bool = false) where T<:Real
     if boxsize > 1 && order >= 0 && 0.0 <= overlap < 1.0
         if !integrated
             x = integrate(x)
@@ -70,11 +70,11 @@ function dfa{T<:Real}(x::AbstractArray{T},
     end
 end
 
-function dfa{T<:Real, S<:Real}(x::AbstractArray{T},
-                               boxes::AbstractArray{S};
-                               order::Int = 1,
-                               overlap::Real = 0.0,
-                               integrated::Bool = false)
+function dfa(x::AbstractArray{T},
+             boxes::AbstractArray{S};
+             order::Int = 1,
+             overlap::Real = 0.0,
+             integrated::Bool = false) where {T<:Real, S<:Real}
     if !integrated
         x = integrate(x)
         integrated = true
@@ -87,13 +87,13 @@ function dfa{T<:Real, S<:Real}(x::AbstractArray{T},
     return fluc
 end
 
-function dfa{T<:Real}(x::AbstractArray{T};
-                      order::Int = 1,
-                      overlap::Real = 0.0,
-                      boxmax::Int = div(length(x), 2),
-                      boxmin::Int = 2*(order + 1),
-                      boxratio::Real = 2,
-                      integrated::Bool = false)
+function dfa(x::AbstractArray{T};
+             order::Int = 1,
+             overlap::Real = 0.0,
+             boxmax::Int = div(length(x), 2),
+             boxmin::Int = 2*(order + 1),
+             boxratio::Real = 2,
+             integrated::Bool = false) where {T<:Real}
     if boxmax > boxmin
         boxes = unique(int(boxratio.^[log(boxratio, boxmin):log(boxratio, boxmax)]))
         if length(boxes) > 1
