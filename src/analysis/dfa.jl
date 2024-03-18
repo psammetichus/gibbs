@@ -49,7 +49,7 @@ function dfa(x::AbstractArray{T},
         if !integrated
             x = integrate(x)
         end
-        overlapnum = ifloor(overlap*boxsize)
+        overlapnum = floor(Integer, overlap*boxsize)
         N = length(x)
         tr = zeros(N)
         i = 0
