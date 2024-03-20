@@ -24,9 +24,9 @@ end #function
 
 function fitsphere(points :: Array{Float64,2})
     #points is Nx3 array
-    x = points[:,1]
-    y = points[:,2]
-    z = points[:,3]
+    x = view(points,:,1)
+    y = view(points,:,2)
+    z = view(points,:,3)
 
     l = ones(length(x))
     O = zeros(length(x))
