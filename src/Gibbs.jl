@@ -1,3 +1,7 @@
+# Copyright 2022–2024 Tyson Burghardt MD FAES
+# Released under GPLv3
+
+
 module Gibbs
 
 
