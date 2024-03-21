@@ -2,11 +2,11 @@ const avgTrodes = ["Fp1", "Fp2", "F7", "F8", "T7", "T8", "P7", "P8",
             "O1", "O2", "F3", "F4", "C3", "C4", "P3", "P4", "Fz", "Cz", "Pz"]
 
 "creates a signal based on `eeg` which represents the average of the list `avgtrodes`"
-function makeAvgRef(eeg :: EEG)
-  ntrodes = length(avgTrodes)
+function makeAvgRef(eeg :: EEG, trodes=avgTrodes)
+  ntrodes = length(trodes)
   avgsig = zeros(eeg.length)
   sigs = zeros(eeg.length, ntrodes)
-  for (j,trode) ∈ enumerate(avgTrodes)
+  for (j,trode) ∈ enumerate(trodes)
     sigs[:,j] = getSignal(eeg,trode)
   end #for
   for i in 1:eeg.length
@@ -17,10 +17,10 @@ function makeAvgRef(eeg :: EEG)
 end #function
 
 "re-references all the signals in `eeg` to the average"
-function makeAvgRef!(eeg :: EEG)
-  ntrodes = length(avgTrodes)
+function makeAvgRef!(eeg :: EEG, trodes=avgTrodes)
+  ntrodes = length(trodes)
   avgRef = makeAvgRef(eeg)
-  for t in avgTrodes
+  for t in trodes
     ss = getSignal(eeg, t)
     ss = ss - avgRef
     putSignal!(eeg, t, ss)
