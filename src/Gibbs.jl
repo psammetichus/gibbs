@@ -66,6 +66,10 @@ export eegFirFilter!, eegIirFilter!, eegFirFilter, eegIirFilter, notch
 include("analysis/pentropy.jl")
 export findSymbol, pentropy
 
+@info "loading spectral entropy"
+include("analysis/spectentropy.jl")
+export spectralEntropy
+
 @info "loading average reference routines..."
 include("basics/average.jl")
 export makeAvgRef, makeAvgRef!
