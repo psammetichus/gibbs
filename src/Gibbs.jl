@@ -21,6 +21,7 @@ using StatsBase
 using LsqFit
 using GLM
 using Base.Threads
+using Wavelets
 
 
 @info "loading basic electrode data..."
@@ -62,13 +63,10 @@ export exportBacAv
 include("transforms/filter.jl")
 export eegFirFilter!, eegIirFilter!, eegFirFilter, eegIirFilter, notch
 
-@info "loading permutation entropy method..."
-include("analysis/pentropy.jl")
-export findSymbol, pentropy
 
-@info "loading spectral entropy"
-include("analysis/spectentropy.jl")
-export spectralEntropy
+@info "loading entropy routines"
+include("analysis/entropy.jl")
+export spectralEntropy, waveletEntropy, findSymbol, pentropy
 
 @info "loading average reference routines..."
 include("basics/average.jl")
