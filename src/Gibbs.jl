@@ -53,7 +53,7 @@ export saveAsJLD, loadJLD
 
 @info "loading IO for EDF files..."
 include("fileio/loadedf.jl")
-export loadEEGFromEDF, loadEEGFromJLD, convertDirectory!
+export loadEEGFromEDF, convertDirectory!
 
 @info "loading exporter for BacAv..."
 include("fileio/bacav.jl")
