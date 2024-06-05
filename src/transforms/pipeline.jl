@@ -10,14 +10,13 @@ function zeroExtend(arr, i, l, segLength)
     end #if
 end #function
 
-function eegSegment(data :: Array{Float64,1}, segLength = 1024)
+function eegSegment(data :: Array{Float64,1}, segLength = 1024, overlap=0)
     l = length(data)
-    segms = ceil(l/segLength)
-    collection = undef(segms)
+    segms = div((l - overlap), (segLength - overlap)) + 1
+    collection = undef(segms, segLength)
     j = 1
-    for i in 1:segLength:l
-        a[j] = zeroExtend(data, i, l, segLength)
-        j +=1
+    for i in 1:segms
+      collection[i,:] = zeroExtend(data, i, l, segLength)
     end #for
     return collection
 end #function
