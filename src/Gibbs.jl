@@ -63,6 +63,9 @@ export exportBacAv
 include("transforms/filter.jl")
 export eegFirFilter!, eegIirFilter!, eegFirFilter, eegIirFilter, notch
 
+@info "loading pipeline methods"
+include("transforms/pipeline.jl")
+export eegSegment, zeroExtend, eegFilter, eegStandardize!, eegRectify!
 
 @info "loading entropy routines"
 include("analysis/entropy.jl")
