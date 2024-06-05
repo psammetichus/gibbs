@@ -14,9 +14,8 @@ function eegSegment(data :: Array{Float64,1}, segLength = 1024, overlap=0)
     l = length(data)
     segms = div((l - overlap), (segLength - overlap)) + 1
     collection = undef(segms, segLength)
-    j = 1
     for i in 1:segms
-      collection[i,:] = zeroExtend(data, i, l, segLength)
+      collection[i,:] = zeroExtend(data, i*(segLength - overlap), segLength, segLength)
     end #for
     return collection
 end #function
