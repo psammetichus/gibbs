@@ -7,10 +7,10 @@ function spectralEdge(s :: Vector{Float64}, Fs :: Float64, k=0.95)
     ssum = 0.0
     total = sum( abs.(ffs).^2 )
     edge = k*total
-    for j in 1:div(width,2)+1
+    for j in 1:div(ll,2)+1
         ssum += abs(ffs[j])^2
         if ssum >= edge
-            return (j/(div(width,2)+1) * div(Fs, 2))
+            return (j/(div(ll,2)+1) * div(Fs, 2))
         end
     end
     return Fs/2
