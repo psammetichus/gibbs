@@ -89,5 +89,9 @@ export loadEEGFrameFromCSV, saveEEGFrameAsCSV
 include("analysis/dfa.jl")
 export dfa
 
+@info "loading Hjorth parameters..."
+include("analysis/hjorth.jl")
+export hjorthActivity, hjorthMobility, hjorthComplexity
+
 
 end #module
