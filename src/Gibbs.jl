@@ -33,7 +33,7 @@ include("basics/EEGData.jl")
 export Annotation, EEG, EEGFrame, convertToDataFrame, getSignal, putSignal!, signalCount,
        getSignalDiff, getSignalAvg, getSignalRefF, filterSignal!, linearComboSignal,
        getAnnotationByNum, findAnnotations, addAnnotation!, AnnotationGroup, EegGroup, freqBands,
-       fourierFreqs, freqBand
+       fourierFreqs, freqBand, getRawSignalData
 
 @info "loading misc routines..."
 include("analysis/misc.jl")
