@@ -22,6 +22,7 @@ using LsqFit
 using GLM
 using Base.Threads
 using Wavelets
+using EntropyHub
 
 
 @info "loading basic electrode data..."
@@ -69,7 +70,7 @@ export eegSegment, zeroExtend, eegFilter, eegStandardize!, eegRectify!
 
 @info "loading entropy routines"
 include("analysis/entropy.jl")
-export spectralEntropy, waveletEntropy, findSymbol, pentropy
+export spectralEntropy, waveletEntropy, pentropy
 
 @info "loading average reference routines..."
 include("basics/average.jl")
