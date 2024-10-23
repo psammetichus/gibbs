@@ -7,7 +7,7 @@ calculating the entropy of the distribution of symbols
 """
 function pentropy(arr :: Vector{Float64}) :: Float64
     perm, pnorm, cpe = PermEn(arr)
-    retrun pnorm
+    return pnorm
 end #function
 
 
