@@ -94,5 +94,8 @@ export dfa
 include("analysis/hjorth.jl")
 export hjorthActivity, hjorthMobility, hjorthComplexity
 
+@info "loading Epileptor model..."
+include("models/epileptor.jl")
+export runEpileptor
 
 end #module
