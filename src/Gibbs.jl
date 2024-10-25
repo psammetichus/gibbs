@@ -23,7 +23,7 @@ using GLM
 using Base.Threads
 using Wavelets
 using EntropyHub
-
+using OrdinaryDiffEq
 
 @info "loading basic electrode data..."
 include("basics/electrodes.jl")
