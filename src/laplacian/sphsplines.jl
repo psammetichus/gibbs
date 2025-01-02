@@ -1,5 +1,3 @@
-module SphSplines
-
 import LegendrePolynomials as LP
 using LinearAlgebra
 
@@ -36,7 +34,10 @@ function gij(order, m, n, trodes)
         for j in 1:l
             for n = 1:order
                 g[i,j] += (2n + 1)*LP.Plm(cosdist(trodes[i],trodes[j], n, order))/(n*(n+1))^m
+            end
             g[i,j] *= fourpi
+        end
+    end
     return g
 end #gij
 
@@ -48,7 +49,10 @@ function hij(order, m, n, trodes)
         for j in 1:l
             for n = 1:order
                 h[i,j] += -2*(n + 1)*LP.Plm(cosdist(trodes[i],trodes[j], n, order))/(n*(n+1))^(m-1)
+            end
             h[i,j] *= fourpi
+        end
+    end
     return h
 end #hij
 
@@ -58,9 +62,8 @@ function lapl(i,t, data, λ=1e-5, G, H)
     di = data[i,t]^-1 * Gs
     Ci = zeros(nelec)
     for j in 1:nelec
-       Ci += di/()
+       Ci += di
 
-
+       #TODO FINISH THIS CODE
+    end #for
 end #lapl
-
-end #module
