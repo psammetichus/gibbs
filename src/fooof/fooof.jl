@@ -8,6 +8,11 @@ const RMat = Array{Float64,2}
 # 5. refit 1/f^b
 # 6. add together Gaussians and 1/f^b
 
+function fitOOF(data :: Vector{Float64})
+  LsqFit.curve_fit(expoFittingModel, data)
+end
+
+
 mutable struct FOOOF
     peakWidthLimits :: Tuple{Float64,Float64}
     maxNPeaks :: Union{Int,Nothing}
