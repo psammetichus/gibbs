@@ -1,5 +1,3 @@
-using OrdinaryDiffEq
-
 #From
 #On the nature of seizure dynamics, Jirsa et al, Brain 2014
 

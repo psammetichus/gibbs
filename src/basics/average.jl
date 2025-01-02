@@ -16,6 +16,16 @@ function makeAvgRef(eeg :: EEG, trodes=avgTrodes)
   return avgsig
 end #function
 
+#assumes an array that's nsamples × ntrodes
+function makeAvgRef(eeg :: Array{Float64})
+  nsamples, ntrodes = length(eeg)
+  avgsig = zeros(nsamples)
+  for i in 1:nsamples
+    avgsig[i] = sum(eeg[i,:])/ntrodes
+  end #for
+  return avgsig
+end
+
 "re-references all the signals in `eeg` to the average"
 function makeAvgRef!(eeg :: EEG, trodes=avgTrodes)
   ntrodes = length(trodes)

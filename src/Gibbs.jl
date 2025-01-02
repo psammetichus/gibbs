@@ -22,7 +22,8 @@ using LsqFit
 using GLM
 using Base.Threads
 using Wavelets
-
+using EntropyHub
+using OrdinaryDiffEq
 
 @info "loading basic electrode data..."
 include("basics/electrodes.jl")
@@ -33,7 +34,7 @@ include("basics/EEGData.jl")
 export Annotation, EEG, EEGFrame, convertToDataFrame, getSignal, putSignal!, signalCount,
        getSignalDiff, getSignalAvg, getSignalRefF, filterSignal!, linearComboSignal,
        getAnnotationByNum, findAnnotations, addAnnotation!, AnnotationGroup, EegGroup, freqBands,
-       fourierFreqs, freqBand
+       fourierFreqs, freqBand, getRawSignalData
 
 @info "loading misc routines..."
 include("analysis/misc.jl")
@@ -69,7 +70,7 @@ export eegSegment, zeroExtend, eegFilter, eegStandardize!, eegRectify!
 
 @info "loading entropy routines"
 include("analysis/entropy.jl")
-export spectralEntropy, waveletEntropy, findSymbol, pentropy
+export spectralEntropy, waveletEntropy, pentropy
 
 @info "loading average reference routines..."
 include("basics/average.jl")
@@ -89,5 +90,12 @@ export loadEEGFrameFromCSV, saveEEGFrameAsCSV
 include("analysis/dfa.jl")
 export dfa
 
+@info "loading Hjorth parameters..."
+include("analysis/hjorth.jl")
+export hjorthActivity, hjorthMobility, hjorthComplexity
+
+@info "loading Epileptor model..."
+include("models/epileptor.jl")
+export runEpileptor
 
 end #module

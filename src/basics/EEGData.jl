@@ -229,3 +229,8 @@ function fourierFreqs(fourierCoeffs :: Vector{Float64}, Fs :: Float64)
   freqs = [i*(Nyq/ll) for i in 1:ll]
   return DataFrame(freqs = freqs, coeffs = fourierCoeffs)
 end #function
+
+
+function getRawSignalData(eeg :: EEG)
+  return eeg.signals
+end #function
