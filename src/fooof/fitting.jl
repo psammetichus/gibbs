@@ -8,21 +8,10 @@
 
 function gaussianFittingModel(xs :: Vector{Float64}, p)
     μ, height, wid = p
-    ys = zero(xs)
-    ys = ys .+ height*exp.( -(x - μ).^2 ./ (2wid^2))
-    return ys
+    return height*exp.( -(xs .- μ).^2 ./ (2wid^2))
 end #func
-
 
 function expoFittingModel(xs :: Vector{Float64}, p)
-    offset, knee, expnt = p
-    ys = zero(xs)
-    ys = ys .+ (offset .- log10.(knee + xs.^expnt))
-    return ys
-end #func
-
-
-function expoNoKneeFittingModel(xs :: Vector{Float64}, p)
     offset, expnt = p
     ys = zero(xs)
     ys = ys .+ (offset .- log10.(xs.^expnt))

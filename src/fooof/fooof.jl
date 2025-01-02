@@ -9,7 +9,7 @@ const RMat = Array{Float64,2}
 # 6. add together Gaussians and 1/f^b
 
 function fitOOF(data :: Vector{Float64}, Fs :: Float64)
-  fit = LsqFit.curve_fit(expoNoKneeFittingModel, range(1.0, step=1.0/Fs, length=length(data)), data, [20.0, -1.5])
+  fit = LsqFit.curve_fit(expoFittingModel, range(1.0, step=1.0/Fs, length=length(data)), data, [20.0, -1.5])
   return fit
 end
 
