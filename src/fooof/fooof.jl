@@ -1,5 +1,13 @@
 const RMat = Array{Float64,2}
 
+#basic FOOOF
+# 1. fit 1/f^b
+# 2. fit Gaussian to peak of residuals
+# 3. fit multiple Gaussians to peaks of residuals
+# 4. when no peaks above 2*stdev stop
+# 5. refit 1/f^b
+# 6. add together Gaussians and 1/f^b
+
 mutable struct FOOOF
     peakWidthLimits :: Tuple{Float64,Float64}
     maxNPeaks :: Union{Int,Nothing}
