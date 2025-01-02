@@ -6,33 +6,38 @@
 #
 
 
-function gaussianFittingFunc(xs :: Vector{Float64}, μ, height, wid)
+function gaussianFittingModel(xs :: Vector{Float64}, p)
+    μ, height, wid = p
     ys = zero(xs)
     ys = ys .+ height*exp.( -(x - μ).^2 ./ (2wid^2))
     return ys
 end #func
 
 
-function expoFittingFunc(xs :: Vector{Float64}, offset, knee, expnt)
+function expoFittingModel(xs :: Vector{Float64}, p)
+    offset, knee, expnt = p
     ys = zero(xs)
     ys = ys .+ (offset .- log10.(knee + xs.^expnt))
     return ys
 end #func
 
 
-function expoNoKneeFittingFunc(xs :: Vector{Float64}, offset, expnt)
+function expoNoKneeFittingModel(xs :: Vector{Float64}, p)
+    offset, expnt = p
     ys = zero(xs)
     ys = ys .+ (offset .- log10.(xs.^expnt))
     return ys
 end #func
 
-function linearFittingFunc(xs :: Vector{Float64}, offset, slope)
+function linearFittingModel(xs :: Vector{Float64}, p)
+    offset, slope = p
     ys = zero(xs)
     ys = ys .+ offset .+ (xs .* slope)
     return ys
 end #func
 
-function quadraticFittingFunc(xs :: Vector{Float64}, offset, slope, curve)
+function quadraticFittingModel(xs :: Vector{Float64}, p)
+    offset, slope, curve = p
     ys = zero(xs)
     ys = ys .+ offset .+ (xs .* slope) + ( (xs.^2) .* curve)
     return ys
