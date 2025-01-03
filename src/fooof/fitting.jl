@@ -5,7 +5,6 @@
 # aperiodic components" DOI 10.1038/s41593-020-00744-x
 #
 
-
 function multiGaussianFittingModel(xs :: Vector{Float64}, p)
     #p is a vector of tuples
     ys = zero(xs)
@@ -19,7 +18,6 @@ function gaussianFittingModel(xs :: Vector{Float64}, p)
     μ, width, height = p
     return height .* exp.( -(xs .- μ).^2 ./ (2width.^2))
 end
-
 
 function expoKneeFittingModel(xs :: Vector{Float64}, p)
     offset, expnt, knee = p

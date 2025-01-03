@@ -1,5 +1,3 @@
-const RMat = Array{Float64,2}
-
 #basic FOOOF
 # 1. fit 1/f^b (or I ugess 1/(k+f^b))
 # 2. fit Gaussian to peak of residuals
@@ -11,6 +9,7 @@ const RMat = Array{Float64,2}
 # think about how to fine-tune our guesses; massaging curve_fit seems to be the most difficult thing here
 #
 
+include("fooof/fitting.jl")
 
 function cfit(model, data, Fs, p)
   ll = length(data)
@@ -99,6 +98,6 @@ function FOOOF(data :: Vector{Float64}, Fs :: Float64)
   finalFit = fitOOF(newData, Fs, offset, expnt, false)
   
   return newData .- expoNoKneeFittingModel(range(1.0, step=Fs/(2*length(psdData))), length=length(psdData), finalFit.param)
-end
+end #function FOOOF
 
 
