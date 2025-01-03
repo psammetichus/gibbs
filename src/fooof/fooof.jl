@@ -1,7 +1,7 @@
 const RMat = Array{Float64,2}
 
 #basic FOOOF
-# 1. fit 1/f^b
+# 1. fit 1/f^b (or I ugess 1/(k+f^b))
 # 2. fit Gaussian to peak of residuals
 # 3. fit multiple Gaussians to peaks of residuals
 # 4. when no peaks above 2*stdev stop
@@ -27,9 +27,9 @@ end
 
 function fitMultiGauss(data, Fs, μs, widths, heights)
   ll = length(data)
-  
+
   for i in μs
-    
+    #TODO actually construct the model    
   end
 end
 
