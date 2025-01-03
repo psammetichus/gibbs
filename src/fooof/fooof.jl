@@ -11,10 +11,13 @@
 
 include("fooof/fitting.jl")
 
+function freq_range(dataLength, Fs)
+  range(1.0, step=Fs/2dataLength, length=dataLength)
+end
+
 function cfit(model, data, Fs, p)
   ll = length(data)
-  freq_mult = Fs/2 / ll
-  LsqFit.curve_fit(model, range(1.0, step=freq_mult, length=ll), data, p)
+  LsqFit.curve_fit(model, freq_range(ll, Fs), data, p)
 end
 
 function fitOOF(data :: Vector{Float64}, Fs :: Float64, offset0, expnt0, knee=false)
@@ -58,11 +61,11 @@ end
 """the data is the raw EEG data; we will calculate the PSD explicitly"""
 function FOOOF(data :: Vector{Float64}, Fs :: Float64)
   #setup
-  threshold = 2
+  threshold = 2 #std
   psdData = log10(psd(data)) #log transformed PSD
-  initOffset, initExpnt = 0 #need logic to make initial guesses
-  
-  
+  initOffset = psdData[1]
+  initExpnt = 1.5
+    
   #initial OOF fit
   if arbitrary_test() #how do we figure out whether to use a knee or not?
     initOOFFit = fitOOF(psdData, Fs, false)
@@ -94,10 +97,11 @@ function FOOOF(data :: Vector{Float64}, Fs :: Float64)
   multiGaussFit = fitMultiGauss(initOOFFit.residuals, Fs, gaussians)
   
   #subtract multigaussians and do final OOF fit (does it need to have a knee?) using initial fit params as guesses
-  newData = psdData .- multiGaussianFittingModel(range(1.0, step=Fs/(2*length(psdData), length=length(psdData))), multiGaussFit.param) #are the params a vector of tuples?
+  newData = psdData .- multiGaussianFittingModel(freq_range(length(psdData), Fs), multiGaussFit.param) #are the params a vector of tuples?
   finalFit = fitOOF(newData, Fs, offset, expnt, false)
   
-  return newData .- expoNoKneeFittingModel(range(1.0, step=Fs/(2*length(newData))), length=length(newData), finalFit.param)
+  finalData = newData .- expoNoKneeFittingModel(freq_range(length(newData), Fs), finalFit.param)
+  return 10.^finalData #convert back to linear space
 end #function FOOOF
 
 
