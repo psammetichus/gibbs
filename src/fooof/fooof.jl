@@ -97,7 +97,7 @@ function FOOOF(data :: Vector{Float64}, Fs :: Float64)
   newData = psdData .- multiGaussianFittingModel(range(1.0, step=Fs/(2*length(psdData), length=length(psdData))), multiGaussFit.param) #are the params a vector of tuples?
   finalFit = fitOOF(newData, Fs, offset, expnt, false)
   
-  return newData .- expoNoKneeFittingModel(range(1.0, step=Fs/(2*length(psdData))), length=length(psdData), finalFit.param)
+  return newData .- expoNoKneeFittingModel(range(1.0, step=Fs/(2*length(newData))), length=length(newData), finalFit.param)
 end #function FOOOF
 
 
