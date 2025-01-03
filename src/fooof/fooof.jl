@@ -27,7 +27,11 @@ end
 
 function fitMultiGauss(data, Fs, μs, widths, heights)
   ll = length(data)
+  
   for i in μs
+    
+  end
+end
 
 
 function findBiggestPeak(data :: Vector{Float64})
