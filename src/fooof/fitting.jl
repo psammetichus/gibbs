@@ -13,22 +13,16 @@ end #func
 
 function expoFittingModel(xs :: Vector{Float64}, p)
     offset, expnt = p
-    ys = zero(xs)
-    ys = ys .+ (offset .- log10.(xs.^expnt))
-    return ys
+    return offset .+ x^expnt
 end #func
 
 function linearFittingModel(xs :: Vector{Float64}, p)
     offset, slope = p
-    ys = zero(xs)
-    ys = ys .+ offset .+ (xs .* slope)
-    return ys
+    return offset .+ (xs .* slope)
 end #func
 
 function quadraticFittingModel(xs :: Vector{Float64}, p)
     offset, slope, curve = p
-    ys = zero(xs)
-    ys = ys .+ offset .+ (xs .* slope) + ( (xs.^2) .* curve)
-    return ys
+    return offset .+ (xs .* slope) + ( (xs.^2) .* curve)
 end #func
 
