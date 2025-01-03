@@ -6,23 +6,30 @@
 #
 
 
+function multiGaussianFittingModel(xs :: Vector{Float64}, p)
+    #p is a vector of tuples
+    ys = zero(xs)
+    for i in length(p)
+        ys = ys .+ p[i,3].*exp.( -(xs .- p[i,1]).^2 ./ (2 .* p[i,2].^2))
+    end
+    return ys
+end #func
+
 function gaussianFittingModel(xs :: Vector{Float64}, p)
-    μ, height, wid = p
-    return height*exp.( -(xs .- μ).^2 ./ (2wid^2))
+    μ, width, height = p
+    return height .* exp.( -(xs .- μ).^2 ./ (2width.^2))
+end
+
+
+function expoKneeFittingModel(xs :: Vector{Float64}, p)
+    offset, expnt, knee = p
+    return offset .- log10(knee .+ xs .^ expnt)
 end #func
 
-function expoFittingModel(xs :: Vector{Float64}, p)
+function expoNoKneeFittingModel(xs :: Vector{Float64}, p)
     offset, expnt = p
-    return offset .+ x^expnt
-end #func
+    return offset .- log10(xs .^ expnt)
+end
 
-function linearFittingModel(xs :: Vector{Float64}, p)
-    offset, slope = p
-    return offset .+ (xs .* slope)
-end #func
 
-function quadraticFittingModel(xs :: Vector{Float64}, p)
-    offset, slope, curve = p
-    return offset .+ (xs .* slope) + ( (xs.^2) .* curve)
-end #func
 
