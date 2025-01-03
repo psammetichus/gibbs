@@ -1,4 +1,4 @@
-# Copyright 2022–2024 Tyson Burghardt MD FAES
+# Copyright 2022–2025 Tyson Burghardt MD FAES
 # Released under GPLv3
 
 
