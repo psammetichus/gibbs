@@ -7,127 +7,73 @@ const RMat = Array{Float64,2}
 # 4. when no peaks above 2*stdev stop
 # 5. refit 1/f^b
 # 6. add together Gaussians and 1/f^b
+#
+# think about how to fine-tune our guesses
+#
+
 
 function fitOOF(data :: Vector{Float64}, Fs :: Float64)
-  fit = LsqFit.curve_fit(expoFittingModel, range(1.0, step=1.0/Fs, length=length(data)), data, [20.0, -1.5])
+  offset = 20.0
+  expnt = -1.5
+  p = [offset expnt]
+  fit = LsqFit.curve_fit(expoFittingModel, range(1.0, step=1.0/Fs, length=length(data)), data, p)
   return fit
 end
 
-function fitGauss(data, Fs)
-
+function fitGauss(data, Fs, μ0, wid0, ht0)
+  p = [μ0 wid0 ht0]
+  fit = LsqFit.curve_fit(gaussianFittingModel, range(1.0, step=1.0/Fs, length=length(data)), data, p)
 end
 
-function FOOOF(data :: Vector{Float64}, Fs :: Float64)
-  initOOFFit = fitOOF(data, Fs)
-  offset, expnt = initOOFFit.param
-  r = initOOFFit.residuals
-
-  initGaussFit = fitGauss(data, Fs)
-end
+function fitMultiGauss(data, Fs, μs, widths, heights)
+  ll = length(data)
+  for i in μs
 
 
-
-mutable struct FOOOF
-    peakWidthLimits :: Tuple{Float64,Float64}
-    maxNPeaks :: Union{Int,Nothing}
-    minPeakHeight :: Float64
-    peakThreshold :: Float64
-    mode :: Symbol
-    apPercentileThresh :: Float64
-    apGuess :: Tuple{Float64,Float64,Float64}
-    apBounds 
-    bwStdEdge :: Float64
-    gaussOverlapThresh :: Float64
-    gaussStdLimits :: Tuple{Float64,Float64}
-    cfBound :: Float64
-    maxFev :: Int
-    errorMetric :: Symbol
-    debug :: Bool
-    checkData :: Bool
-    attrs :: Union{FOOOFAttrs,Nothing}
-end
-
-mutable struct FOOOFAttrs
-    freqs :: Vector{Float64}
-    powerSpectrum :: Vector{Float64} #log10 scale
-    freqRange :: Tuple{Float64,Float64}
-    freqRes :: Float64
-    fooofedSpectrum :: Vector{Float64}
-    aperiodicParams :: Vector{Float64}
-    peakParams :: RMat
-    gaussianParams :: RMat
-end
-
-struct FOOOFFreqs
-    freqs :: Vector{Float64}
-    freqRange :: Tuple{Float64,Float64}
-    freqRes :: Float64
-end
-
-mutable struct FOOOFResults
-    fooofedSpectrum :: Vector{Float64}
-    aperiodicParams :: Vector{Float64}
-    peakParams :: RMat
-    gaussianParams :: RMat
-    rSquared :: Float64
-    error :: Float64
-    spectrumFlat :: Vector{Float64}
-    spectrumPeakRm :: Vector{Float64}
-    apFit :: Vector{Float64}
-    peakFit :: Vector{Float64}
-end
-
- 
-
-function newFOOOF(  pkWidLim :: Tuple{Float64,Float64} = (0.5, 12.0),
-                    maxNP :: Union{Int,Nothing} = nothing,
-                    minPkHt :: Float64 = 0.0,
-                    pkThresh :: Float64 = 2.0,
-                    apMode :: Symbol = :fixed )
-
-    return FOOOF(pkWidLim, maxNP, minPkHt, pkThresh, apMode,
-                 0.025, (nothing,0,nothing), nothing, 1.0, 0.75, [],
-                 1.5, 5000, :MAE, false, false, nothing)
-end # func
-
-
-function hasData(f :: FOOOF) :: Bool
-  if isnothing(f.attrs)
-    return false
-  else
-    if isempty(f.attrs.powerSpectrum)
-      return false
-    else
-      return true
+function findBiggestPeak(data :: Vector{Float64})
+  inds, pks = findmaxima(data)
+  biggestind = 0
+  biggestpk = 0
+  for i in 1:length(maxinds)
+    if pks[i] > biggestpk
+      biggestpk = pks[i]
+      biggestind = inds[i]
     end
   end
-end #hasData
+  return biggestind, biggestpk
+end
 
-function hasModel(f :: FOOOF) :: Bool
-  if isnothing(f.attrs)
-    return false
-  elseif all(isnan, f.attrs.aperiodicParams)
-    return false
-  else
-    return true
+function aboveNoiseFloor(peak :: Float64, data :: Vector{Float64}, thresholdDev :: Float64)
+  peak > thresholdDev*stdev(data)
+end
+
+"""the data is the raw EEG data; we will calculate the PSD explicitly"""
+function FOOOF(data :: Vector{Float64}, Fs :: Float64)
+  threshold = 2
+  psdData = psd(data)
+  initOffset, initExpnt
+  initOOFFit = fitOOF(psdData, Fs)
+  offset, expnt = initOOFFit.param
+
+  flag = false
+  gaussians = []
+  peakInd, peakAmp = findBiggestPeak(initGaussFit.residuals,threshold)
+  if aboveNoiseFloor(peakAmp)
+    flag = true
   end
-end #hasModel
-
-function nPeaks(f :: FOOOF) :: Union{RMat, Nothing}
-  if hasModel(f)
-    return f.attrs.peakParams
-  else
-    return nothing
+  while flag
+    flag = false
+    #calculate widGuess from FWHM of peak
+    aGaussFit = fitGauss(initOOFFit.residuals, Fs, peakInd/Fs, widGuess, peakAmp)
+    gaussians = hcat(gaussians, aGaussFit.param) #doesn't work with gaussians = []
+    peakInd, peakAmp = findBiggestPeak(aGaussFit.residuals, threshold)
+    if aboveNoiseFloor(peakAmp)
+      flag = true
+    end
   end
-end #nPeaks
+  
+  multiGaussFit = fitMultiGauss(initOOFFit.residuals, Fs, gaussians[1,:], gaussians[2,:], gaussians[3,:])
+  
+end
 
-function resetInternalSettings(f :: FOOOF)
-  f.gaussStdLimits = (x -> x/2).(f.peakWidthLimits)
-end #resetInternalSettings
 
-function resetDataResults(f::FOOOF)
-# just going to set attrs to nothing
-# the python code can reset either the freqs, the spectrum, or the results
-# and this is great but it means all sorts of stupid sentinel checking
-# could refactor attrs into these three types
-end #func
