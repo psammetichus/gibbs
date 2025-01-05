@@ -91,9 +91,8 @@ function FOOOF(data :: Vector{Float64}, Fs :: Float64, kneeMode=false)
   end
   while flag
     flag = false
-    #calculate widGuess from FWHM of peak
-    findFWHM(peakInd)
-    aGaussFit = fitGauss(initOOFFit.residuals, Fs, peakInd/Fs, widGuess, peakAmp)
+    estSD = findFWHM(peakInd) |> estimateSD
+    aGaussFit = fitGauss(initOOFFit.residuals, Fs, peakInd/Fs, estSD, peakAmp)
     push!(gaussians, aGaussFit.param...)
     peakInd, peakAmp = findBiggestPeak(aGaussFit.residuals)
     if aboveNoiseFloor(peakAmp, data, threshold)
