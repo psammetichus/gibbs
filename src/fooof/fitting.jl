@@ -8,8 +8,8 @@
 function multiGaussianFittingModel(xs :: Vector{Float64}, p)
     #p is a vector of tuples
     ys = zero(xs)
-    for i in length(p)
-        ys = ys .+ p[i,3].*exp.( -(xs .- p[i,1]).^2 ./ (2 .* p[i,2].^2))
+    for i in length(p)/3
+        ys = ys .+ p[i+2].*exp.( -(xs .- p[i+0]).^2 ./ (2 .* p[i+1].^2))
     end
     return ys
 end #func

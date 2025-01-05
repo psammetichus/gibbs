@@ -66,7 +66,7 @@ function aboveNoiseFloor(peak :: Float64, data :: Vector{Float64}, thresholdDev 
 end
 
 """the data is the raw EEG data; we will calculate the PSD explicitly"""
-function FOOOF(data :: Vector{Float64}, Fs :: Float64)
+function FOOOF(data :: Vector{Float64}, Fs :: Float64, kneeMode=false)
   #setup
   threshold = 2 #std
   psdData = log10(psd(data)) #log transformed PSD
@@ -74,10 +74,10 @@ function FOOOF(data :: Vector{Float64}, Fs :: Float64)
   initExpnt = 1.5
     
   #initial OOF fit
-  if arbitrary_test() #how do we figure out whether to use a knee or not?
-    initOOFFit = fitOOF(psdData, Fs, false)
-  else
+  if kneeMode
     initOOFFit = fitOOF(psdData, Fs, true)
+  else
+    initOOFFit = fitOOF(psdData, Fs, false)
   end
   offset, expnt = initOOFFit.param
 
@@ -94,7 +94,7 @@ function FOOOF(data :: Vector{Float64}, Fs :: Float64)
     #calculate widGuess from FWHM of peak
     findFWHM(peakInd)
     aGaussFit = fitGauss(initOOFFit.residuals, Fs, peakInd/Fs, widGuess, peakAmp)
-    push!(gaussians, tuple(aGaussFit.param...)) #store params as vector of tuples
+    push!(gaussians, aGaussFit.param...)
     peakInd, peakAmp = findBiggestPeak(aGaussFit.residuals)
     if aboveNoiseFloor(peakAmp, data, threshold)
       flag = true
