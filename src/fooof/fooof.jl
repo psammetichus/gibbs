@@ -37,6 +37,13 @@ function fitMultiGauss(data, Fs, p)
   return cfit(multiGaussianFittingModel, data, Fs, p)
 end
 
+function findFWHM(index)
+  #TODO
+end
+
+function estimateSD(fwhm)
+  return fwhm/(2*√(2*log*2))
+end
 
 function findBiggestPeak(data :: Vector{Float64})
   inds, pks = findmaxima(data)
@@ -82,6 +89,7 @@ function FOOOF(data :: Vector{Float64}, Fs :: Float64)
   while flag
     flag = false
     #calculate widGuess from FWHM of peak
+    findFWHM(peakInd)
     aGaussFit = fitGauss(initOOFFit.residuals, Fs, peakInd/Fs, widGuess, peakAmp)
     push!(gaussians, tuple(aGaussFit.param...)) #store params as vector of tuples
     peakInd, peakAmp = findBiggestPeak(aGaussFit.residuals)
