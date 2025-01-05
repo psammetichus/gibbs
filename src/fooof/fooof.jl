@@ -109,7 +109,7 @@ function FOOOF(data :: Vector{Float64}, Fs :: Float64)
   finalFit = fitOOF(newData, Fs, offset, expnt, false)
   
   finalData = newData .- expoNoKneeFittingModel(freq_range(length(newData), Fs), finalFit.param)
-  return 10.^finalData #convert back to linear space
+  return 10 .^ finalData #convert back to linear space
 end #function FOOOF
 
 
