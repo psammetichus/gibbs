@@ -86,6 +86,8 @@ export loadEEGFrameFromCSV, saveEEGFrameAsCSV
 
 #include("fooof/fooof.jl")
 
+#include("microstate/microstate.jl")
+
 @info "loading DFA..."
 include("analysis/dfa.jl")
 export dfa
