@@ -87,11 +87,12 @@ include("fileio/eegcsv.jl")
 export loadEEGFrameFromCSV, saveEEGFrameAsCSV
 
 #include("fooof/fooof.jl")
+#export FOOOF
 
 #include("microstate/microstate.jl")
 
 #include("dmf/fastmdf.jl")
-
+#export runDMF
 
 @info "loading DFA..."
 include("analysis/dfa.jl")

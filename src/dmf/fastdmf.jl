@@ -46,7 +46,7 @@ function curr2rate(x :: Vector{Float64}, wgain, g, I, d, p)
     return y / (1-exp(-d*y))
 end
 
-function run(p :: DMFSimParams, rateRes :: Array{Float64,2})
+function runDMF(p :: DMFSimParams, rateRes :: Array{Float64,2})
     if p.returnBold
         @info "BOLD integrator not implemented."
     end
