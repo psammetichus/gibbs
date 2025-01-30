@@ -1,4 +1,4 @@
-#This is a part of Gibbs, (c) 2022–2025 Tyson Burghardt MD FAES
+ #This is a part of Gibbs, (c) 2022–2025 Tyson Burghardt MD FAES
 #translated from the Microstates EEGLAB toolbox
 
 #variational microstates
