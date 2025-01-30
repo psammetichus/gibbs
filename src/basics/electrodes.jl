@@ -86,3 +86,29 @@ const ifcn_electrodes = [
        Electrode("O2", 	(tenUp,		+180 - tenpctDeg))
 	]
        
+  const tentwenty_electrodes = [
+    Electrode("Cz", 	(0,		0)),
+    Electrode("Nz", 	(+90,		0)),
+    Electrode("In", 	(+90,		+180)),
+    Electrode("Fpz", (tenUp,		0)),
+    Electrode("Fz", 	(twenDown,	0)),
+    Electrode("Pz", 	(twenDown,	+180)),
+    Electrode("Oz", 	(tenUp,		+180)),
+    Electrode("T7", 	(tenUp,		-90)),
+    Electrode("T8", 	(tenUp,		+90)),
+    Electrode("C3", 	(twenDown,	-90)),
+    Electrode("C4", 	(twenDown,	+90)),
+    Electrode("Fp1",	(tenUp,		-tenpctDeg)),
+    Electrode("Fp2",	(tenUp,		+tenpctDeg)),
+    Electrode("F7", 	(tenUp,		-90 + twenpctDeg)),
+    Electrode("F8", 	(tenUp,		+90 - twenpctDeg)),
+    Electrode("F3", 	(threefourth,	-threefourphi)),
+    Electrode("F4", 	(threefourth,	+threefourphi)),
+    Electrode("P3", 	(threefourth,	-180+threefourphi)),
+    Electrode("P4", 	(threefourth,	+180-threefourphi)),
+    Electrode("P7", 	(tenUp,         -90 - twenpctDeg)),
+    Electrode("P8", 	(tenUp,         +90 + twenpctDeg)),
+    Electrode("O1", 	(tenUp,		-180 + tenpctDeg)),
+    Electrode("O2", 	(tenUp,		+180 - tenpctDeg))
+]
+    
