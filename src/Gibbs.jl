@@ -24,6 +24,8 @@ using Base.Threads
 using Wavelets
 using EntropyHub
 using OrdinaryDiffEq
+using Random
+using Distributions
 
 @info "loading basic electrode data..."
 include("basics/electrodes.jl")
@@ -87,6 +89,9 @@ export loadEEGFrameFromCSV, saveEEGFrameAsCSV
 #include("fooof/fooof.jl")
 
 #include("microstate/microstate.jl")
+
+#include("dmf/fastmdf.jl")
+
 
 @info "loading DFA..."
 include("analysis/dfa.jl")
