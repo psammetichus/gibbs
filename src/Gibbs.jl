@@ -26,6 +26,8 @@ using EntropyHub
 using OrdinaryDiffEq
 using Random
 using Distributions
+using Match
+
 
 @info "loading basic electrode data..."
 include("basics/electrodes.jl")

@@ -17,11 +17,6 @@
 #
 #
 
-module XLTEKReader
-
-using Dates
-using Match
-
 struct EEGMontage
   chanLabels :: Vector{String}
   chanNumber :: Int
@@ -66,7 +61,7 @@ mutable struct Openxlt
 
   objectEEG
   objectEEGList
-  objectEEGMontage :: Union{EEGMontage, Nothing}
+  objectEEGMontage :: Union{Some{EEGMontage}, Nothing}
   objectSTC
   objectENT
   objectVTC
@@ -113,7 +108,7 @@ end #struct
 
 
 #type alias
-XltObj = Union{Vector,String,Dict,Pair}
+XltObj = Union{Vector{Float64},String,Dict,Pair}
 
 
 function parseObj(oxlt :: Openxlt, cur :: Int, intxt :: String) :: Tuple{Openxlt,Int}
@@ -356,5 +351,3 @@ function loadEEG(oxlt)
 
 
 end #loadEEG
-
-end #module
