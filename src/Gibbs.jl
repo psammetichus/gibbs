@@ -28,6 +28,7 @@ using Random
 using Distributions
 using Match
 using Dates
+using SlurmClusterManager
 
 
 @info "loading basic electrode data..."
