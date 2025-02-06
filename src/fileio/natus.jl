@@ -2,11 +2,11 @@
 #
 #   XLTEKReader
 #
-#   Adapted from Openxlt MATLAB code by Jiarui Wang (jwang04@g.harvard.edu)
+#   Adapted from OpenXLT MATLAB code by Jiarui Wang (jwang04@g.harvard.edu)
 #
 #   Usage
 #
-#       o = Openxlt('test/raw_data');
+#       o = OpenXLT('test/raw_data');
 #       o = o.load();
 #
 #   Part of Gibbs
@@ -17,6 +17,8 @@
 #
 #
 
+
+
 struct EEGMontage
   chanLabels :: Vector{String}
   chanNumber :: Int
@@ -24,19 +26,26 @@ struct EEGMontage
 end
 
 
-mutable struct Openxlt
-  #filenames
-  nameScript :: String
-  nameDir :: String
-  nameFileRoot :: String
-  nameFileEEG :: String
-  nameFileSTC :: String
-  nameFileENT :: String
-  nameFileVTC :: String
-
-  #numbers
+mutable struct OpenXLT
+  filenames :: OpenXLTFiles
   nDataFiles :: Int
+  states :: OpenXLTState
+  objs :: OpenXLTObjects
+  subj :: OpenXLTSubject
+end
 
+mutable struct OpenXLTFiles
+  #filenames
+  script :: String
+  dir :: String
+  fileRoot :: String
+  fileEEG :: String
+  fileSTC :: String
+  fileENT :: String
+  fileVTC :: String
+end
+
+mutable struct OpenXLTState
   #load states
   stateLoadedEEG :: Bool
   stateLoadedEEGMontages :: Bool
@@ -47,6 +56,7 @@ mutable struct Openxlt
   stateLoadedENT :: Bool
   stateLoadedVTC :: Bool
   stateLoadedETC :: Vector{Bool}
+end
 
   #structs
   #original matlab defs
@@ -59,59 +69,54 @@ mutable struct Openxlt
   #object_vtc; % list of video files
   #object_etc; % list of erd data file pointers
 
+mutable struct OpenXLTObjects
   objectEEG
   objectEEGList
-  objectEEGMontage :: Union{Some{EEGMontage}, Nothing}
+  objectEEGMontage :: Union{EEGMontage, Nothing}
   objectSTC
   objectENT
   objectVTC
   objectETC
+end
 
+mutable struct OpenXLTSubject
   #information
-  subjectID
-  subjectFirstName :: String
-  subjectMiddleName :: String
-  subjectLastName :: String
-  subjectGUID :: String
-  subjectAgeLabel
-  subjectAge :: Int
-  subjectBirthdateLabel
-  subjectBirthdateStr :: String
-  subjectBirthdate :: Date
-  subjectGenderLabel
-  subjectGender
-  subjectHandedness
-  subjectHeight
-  subjectWeight
-  subjectFreqSamp :: Float64
-  subjectHeadboxSn
-  subjectStudyCreationTime :: DateTime
-  subjectStudyXLCreationTime :: DateTime
-  subjectStudyModificationTime :: DateTime
-  subjectStudyEpochLength :: Int64
-  subjectStudyWriterVersionMajor :: Int
-  subjectStudyWriterVersionMinor :: Int
-  subjectStudyProductVersionHigh :: Int
-  subjectStudyProductVersionLow :: Int
-  subjectStudyOrigStudyGUID :: String
-  subjectStudyGUID :: String
-  subjectStudyFileContents
-
-  #recording info
-  #these are commented out?
-  #timeRecordingStart :: DateTime
-  #timeRecordingEnd :: DateTime
-  #entCleaned
-
-
-end #struct
-
+  ID
+  firstName :: String
+  middleName :: String
+  lastName :: String
+  GUID :: String
+  ageLabel
+  age :: Int
+  birthdateLabel
+  birthdateStr :: String
+  birthdate :: Date
+  genderLabel
+  gender
+  handedness
+  height
+  weight
+  freqSamp :: Float64
+  headboxSn
+  studyCreationTime :: DateTime
+  studyXLCreationTime :: DateTime
+  studyModificationTime :: DateTime
+  studyEpochLength :: Int64
+  studyWriterVersionMajor :: Int
+  studyWriterVersionMinor :: Int
+  studyProductVersionHigh :: Int
+  studyProductVersionLow :: Int
+  studyOrigStudyGUID :: String
+  studyGUID :: String
+  studyFileContents
+end
+  
 
 #type alias
-XltObj = Union{Vector{Float64},String,Dict,Pair}
+XltObj = Union{Vector,String,Dict,Pair}
 
 
-function parseObj(oxlt :: Openxlt, cur :: Int, intxt :: String) :: Tuple{Openxlt,Int}
+function parseObj(oxlt :: OpenXLT, cur :: Int, intxt :: String) :: Tuple{OpenXLT,Int}
   statePass = true
   stateType :: Char = 'x' 
   while statePass
@@ -155,7 +160,7 @@ function parseObj(oxlt :: Openxlt, cur :: Int, intxt :: String) :: Tuple{Openxlt
 end #function
 
 
-function parsePair(oxlt :: Openxlt, cur :: Int, intxt :: String) :: Tuple{Pair,Int}
+function parsePair(oxlt :: OpenXLT, cur :: Int, intxt :: String) :: Tuple{Pair,Int}
   stateIsKey = false
   stateIsVal = false
   while true
@@ -195,7 +200,7 @@ but in Julia an array of chars is not the same as a string
 So needs fixing
 
 """
-function parseArray(oxlt :: Openxlt, cur::Int, intxt::String) :: Tuple{Array,Int}
+function parseArray(oxlt :: OpenXLT, cur::Int, intxt::String) :: Tuple{Array,Int}
   statePass = true
   outArray = []
   while statePass
@@ -223,7 +228,8 @@ function parseArray(oxlt :: Openxlt, cur::Int, intxt::String) :: Tuple{Array,Int
     cur += 1
       #array of char not the same as a string
   end #while
-
+    if typeof(outArray) == Vector{Char}
+      outArray = 
     return outArray, cur
 
 end #parseArray
@@ -351,3 +357,4 @@ function loadEEG(oxlt)
 
 
 end #loadEEG
+
