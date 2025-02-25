@@ -66,6 +66,11 @@ function runDMF(p :: DMFSimParams, rateRes :: Array{Float64,2})
 
             rateRes[:,rateIdx] = curr2rate(xn, p.wgainₑ, p.gₑ, p.Iₑ, p.dₑ)
             rg = curr2rate(xg, p.wgainᵢ, p.gᵢ, p.Iᵢ, p.dᵢ)
+            
+            rnd = rand(n, p.N)
+            sn += dt*(-sn/p.taon+(1-sn).*p.γ*rateRes[:,rateIdx]/1000)
+            sn = clip.(sn)
+            
             rnd = rand(n, p.N)
             sg += p.dt * (-sg/p.taog + rg/1000) + rnd
             sg = clip.(sg)
