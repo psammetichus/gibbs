@@ -27,6 +27,9 @@ using OrdinaryDiffEq
 using Random
 using Distributions
 using Match
+using Dates
+using SlurmClusterManager
+using Distributed
 
 
 @info "loading basic electrode data..."
