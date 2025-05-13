@@ -11,7 +11,9 @@ function estimateLTV(eeg :: Matrix{Float64})
     H = zeros(T-1, N*3)
     for i in 1:T-1
         for j in 1:3
-            H[]
+            H[] #TODO
+        end
+    end
 end #function
 
 # b is N*(T-1); H is T-1 x N*3; X is N*N
