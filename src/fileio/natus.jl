@@ -229,9 +229,9 @@ function parseArray(oxlt :: OpenXLT, cur::Int, intxt::String) :: Tuple{Array,Int
       #array of char not the same as a string
   end #while
     if typeof(outArray) == Vector{Char}
-      outArray = 
+      outArray = #TODO
     return outArray, cur
-
+    end
 end #parseArray
 
 """
