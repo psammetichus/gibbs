@@ -15,7 +15,7 @@ create table RecordData (
 create table Subject (
       subjID integer primary key autoincrement,
       age integer,
-      gender text,
+      gender text
 );
 
 create table RecordXSubject (
@@ -26,7 +26,8 @@ create table RecordXSubject (
 
 create table Electrodes (
       trodeID integer primary key autoincrement,
-      trodeName text
+      trodeName text,
+      laterality text
 );
 
 create table Annotations (
@@ -35,5 +36,6 @@ create table Annotations (
       onset real,
       duration real,
       name text,
-      desc text
+      desc text,
+      annType text
 );
