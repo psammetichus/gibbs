@@ -133,13 +133,13 @@ function parseObj(oxlt :: OpenXLT, cur :: Int, intxt :: String) :: Tuple{OpenXLT
         aPair, cur = parsePair(oxlt, cur+1, intxt)
         stateType = 'p'
       elseif intxt[cur+1] == '('
-        aArray, cur = parseArray(cur+1,intxt)
+        aArray, cur = parseArray(oxlt, cur+1,intxt)
         stateType = 'a'
       end
     elseif intxt[cur] == ')'
       break
     elseif intxt[cur] == '"'
-      aString, cur = parseArray(cur, intxt)
+      aString, cur = parseString(oxlt, cur+1, intxt)
       stateType = 'v'
     end #ifelseif
     
@@ -153,12 +153,23 @@ function parseObj(oxlt :: OpenXLT, cur :: Int, intxt :: String) :: Tuple{OpenXLT
     'o' => return aObj, cur
     'p' => return aPair, cur
     'a' => return aArray, cur
-    'v' => return String(aString), cur
+    'v' => return aString, cur
     _   => nothing
   end
    
 end #function
 
+function parseString(oxlt :: OpenXLT, cur :: Int, intxt :: String) :: Tuple{OpenXLT, Int}
+  theString = ""
+  while true
+    if intxt[cur] == '"'
+      break
+    end
+    theString *= intxt[cur]
+    cur += 1
+  end
+  return theString, cur
+end
 
 function parsePair(oxlt :: OpenXLT, cur :: Int, intxt :: String) :: Tuple{Pair,Int}
   stateIsKey = false
@@ -207,31 +218,10 @@ function parseArray(oxlt :: OpenXLT, cur::Int, intxt::String) :: Tuple{Array,Int
     if intxt[cur] == '('
       obj,cur = parseObj(oxlt,cur+1,intxt)
       append!(outArray, obj)
-      try #seems like a superfluous try block; probably needed for backtracking
-        if intxt[cur+1] != ','
-          break
-        end
-      catch e
-        break
-      end #try
-    elseif intxt[cur] == '"'
-      obj, cur = parseObj(cursor+1,intxt)
-      append!(outArray,obj)
-      try
-        if intxt[cur+1] != ','
-          break
-        end
-      catch
-        break
-      end #try
     end #ifelseif
     cur += 1
-      #array of char not the same as a string
   end #while
-    if typeof(outArray) == Vector{Char}
-      outArray = #TODO
-    return outArray, cur
-    end
+  return outArray, cur
 end #parseArray
 
 """
@@ -243,8 +233,7 @@ not sure the return value yet
 """
 function parseValue(oxlt, cur::Int, intxt::String) :: Tuple{Any,Int}
   stateIsObj = false
-  #64 digit--supposed to be a 64bit value I think
-  val = "0000000000000000000000000000000000000000000000000000000000000000" #okay...
+  val = []
   valIdx = 1
   stateParen = false
   retObj = nothing
@@ -270,8 +259,7 @@ function parseValue(oxlt, cur::Int, intxt::String) :: Tuple{Any,Int}
         stateParen = !stateParen
       end #if
 
-      val[valIdx] = c
-      valIdx += 1
+      append!(val, c)
     end #ifelseif
 
     cur +=1
@@ -281,7 +269,7 @@ function parseValue(oxlt, cur::Int, intxt::String) :: Tuple{Any,Int}
   if stateIsObj
     retObj = val
   else
-    retObj = val[1:valIdx-1]
+    retObj = val
   end #if
 
   return retObj, cur
@@ -355,6 +343,13 @@ function loadEEG(oxlt)
   eegID = "Complete this"
   
 
+  #TODO
 
 end #loadEEG
 
+
+function carveF(indir, suffix)
+  d = readdir(indir, join=true)
+  dIsDir = filter(isdir, d)
+  #TODO
+end
