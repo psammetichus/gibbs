@@ -282,9 +282,11 @@ function parseMontageFromEEG(oxlt)
   #wait this is fucking stupid
   hh = transcode(UInt8, "ChanNames")
 
-  mtxt = split(oxlt.objectEEGMontage.mtxt, "0x")
+  oxlt.obj.objectEEGMontage.mtxt = split(oxlt.obj.objectEEGMontage.mtxt, "0x")
 
 end #parseMontageFromEEG
+
+
 
 function cleanKey(oxlt, key) :: String
   key = replace(key, ' ' => "")
@@ -337,8 +339,11 @@ function loadEEG(oxlt)
   ID_EEG = [-905246832,298899349,-1610599761,-1521198300,65539]
 
   fEEG = open(oxlt.nameFileEEG, 'r')
-  eegID = "Complete this"
-  
+  eegID = Int32.(read(fEEG, idBytes/intBytes))
+  if eegID != ID_EEG
+    println("file $(oxlt.nameFileEEG) doesn't have correct id")
+  end
+   
 
   #TODO
 
