@@ -347,6 +347,11 @@ end #loadEEG
 
 function carveF(indir, suffix)
   d = readdir(indir, join=true)
-  dIsDir = filter(isdir, d)
-  #TODO
+  files = filter(isfile, d)
+  return findall(x => endswith(x, uppercase(suffix)), files)
 end
+
+function checkFileExists(file, suffix)
+  isfile(file * suffix)
+end
+
