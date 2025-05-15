@@ -3,15 +3,11 @@
 #   XLTEKReader
 #
 #   Adapted from OpenXLT MATLAB code by Jiarui Wang (jwang04@g.harvard.edu)
-#
-#   Usage
-#
-#       o = OpenXLT('test/raw_data');
-#       o = o.load();
+#   from Github https://github.com/mrjiaruiwang/OpenXLT/blob/main/Openxlt.m
 #
 #   Part of Gibbs
 #
-#   Tyson Burghardt
+#   (c)2022-2025 Tyson Burghardt MD FAES
 #
 #   Licensed under GPLv3
 #
@@ -215,7 +211,7 @@ function parseArray(oxlt :: OpenXLT, cur::Int, intxt::String) :: Tuple{Array,Int
         break
       end #try
     elseif intxt[cur] == '"'
-      obj, cur = parseObj(cursor+1,intxt)
+      obj, cur = parseValue(cursor,intxt)
       append!(outArray,obj)
       try
         if intxt[cur+1] != ','
@@ -229,7 +225,7 @@ function parseArray(oxlt :: OpenXLT, cur::Int, intxt::String) :: Tuple{Array,Int
       #array of char not the same as a string
   end #while
     if typeof(outArray) == Vector{Char}
-      outArray = #TODO
+      outArray = String(outArray)
     return outArray, cur
     end
 end #parseArray
