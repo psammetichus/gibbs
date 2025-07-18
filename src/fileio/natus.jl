@@ -2,25 +2,18 @@
 #
 #   XLTEKReader
 #
-#   Adapted from Openxlt MATLAB code by Jiarui Wang (jwang04@g.harvard.edu)
-#
-#   Usage
-#
-#       o = Openxlt('test/raw_data');
-#       o = o.load();
+#   Adapted from OpenXLT MATLAB code by Jiarui Wang (jwang04@g.harvard.edu)
+#   from Github https://github.com/mrjiaruiwang/OpenXLT/blob/main/Openxlt.m
 #
 #   Part of Gibbs
 #
-#   Tyson Burghardt
+#   (c)2022-2025 Tyson Burghardt MD FAES
 #
 #   Licensed under GPLv3
 #
 #
 
-module XLTEKReader
 
-using Dates
-using Match
 
 struct EEGMontage
   chanLabels :: Vector{String}
@@ -29,19 +22,26 @@ struct EEGMontage
 end
 
 
-mutable struct Openxlt
-  #filenames
-  nameScript :: String
-  nameDir :: String
-  nameFileRoot :: String
-  nameFileEEG :: String
-  nameFileSTC :: String
-  nameFileENT :: String
-  nameFileVTC :: String
-
-  #numbers
+mutable struct OpenXLT
+  filenames :: OpenXLTFiles
   nDataFiles :: Int
+  states :: OpenXLTState
+  objs :: OpenXLTObjects
+  subj :: OpenXLTSubject
+end
 
+mutable struct OpenXLTFiles
+  #filenames
+  script :: String
+  dir :: String
+  fileRoot :: String
+  fileEEG :: String
+  fileSTC :: String
+  fileENT :: String
+  fileVTC :: String
+end
+
+mutable struct OpenXLTState
   #load states
   stateLoadedEEG :: Bool
   stateLoadedEEGMontages :: Bool
@@ -52,6 +52,7 @@ mutable struct Openxlt
   stateLoadedENT :: Bool
   stateLoadedVTC :: Bool
   stateLoadedETC :: Vector{Bool}
+end
 
   #structs
   #original matlab defs
@@ -64,6 +65,7 @@ mutable struct Openxlt
   #object_vtc; % list of video files
   #object_etc; % list of erd data file pointers
 
+mutable struct OpenXLTObjects
   objectEEG
   objectEEGList
   objectEEGMontage :: Union{EEGMontage, Nothing}
@@ -71,52 +73,46 @@ mutable struct Openxlt
   objectENT
   objectVTC
   objectETC
+end
 
+mutable struct OpenXLTSubject
   #information
-  subjectID
-  subjectFirstName :: String
-  subjectMiddleName :: String
-  subjectLastName :: String
-  subjectGUID :: String
-  subjectAgeLabel
-  subjectAge :: Int
-  subjectBirthdateLabel
-  subjectBirthdateStr :: String
-  subjectBirthdate :: Date
-  subjectGenderLabel
-  subjectGender
-  subjectHandedness
-  subjectHeight
-  subjectWeight
-  subjectFreqSamp :: Float64
-  subjectHeadboxSn
-  subjectStudyCreationTime :: DateTime
-  subjectStudyXLCreationTime :: DateTime
-  subjectStudyModificationTime :: DateTime
-  subjectStudyEpochLength :: Int64
-  subjectStudyWriterVersionMajor :: Int
-  subjectStudyWriterVersionMinor :: Int
-  subjectStudyProductVersionHigh :: Int
-  subjectStudyProductVersionLow :: Int
-  subjectStudyOrigStudyGUID :: String
-  subjectStudyGUID :: String
-  subjectStudyFileContents
-
-  #recording info
-  #these are commented out?
-  #timeRecordingStart :: DateTime
-  #timeRecordingEnd :: DateTime
-  #entCleaned
-
-
-end #struct
-
+  ID
+  firstName :: String
+  middleName :: String
+  lastName :: String
+  GUID :: String
+  ageLabel
+  age :: Int
+  birthdateLabel
+  birthdateStr :: String
+  birthdate :: Date
+  genderLabel
+  gender
+  handedness
+  height
+  weight
+  freqSamp :: Float64
+  headboxSn
+  studyCreationTime :: DateTime
+  studyXLCreationTime :: DateTime
+  studyModificationTime :: DateTime
+  studyEpochLength :: Int64
+  studyWriterVersionMajor :: Int
+  studyWriterVersionMinor :: Int
+  studyProductVersionHigh :: Int
+  studyProductVersionLow :: Int
+  studyOrigStudyGUID :: String
+  studyGUID :: String
+  studyFileContents
+end
+  
 
 #type alias
 XltObj = Union{Vector,String,Dict,Pair}
 
 
-function parseObj(oxlt :: Openxlt, cur :: Int, intxt :: String) :: Tuple{Openxlt,Int}
+function parseObj(oxlt :: OpenXLT, cur :: Int, intxt :: String) :: Tuple{OpenXLT,Int}
   statePass = true
   stateType :: Char = 'x' 
   while statePass
@@ -133,13 +129,13 @@ function parseObj(oxlt :: Openxlt, cur :: Int, intxt :: String) :: Tuple{Openxlt
         aPair, cur = parsePair(oxlt, cur+1, intxt)
         stateType = 'p'
       elseif intxt[cur+1] == '('
-        aArray, cur = parseArray(cur+1,intxt)
+        aArray, cur = parseArray(oxlt, cur+1,intxt)
         stateType = 'a'
       end
     elseif intxt[cur] == ')'
       break
     elseif intxt[cur] == '"'
-      aString, cur = parseArray(cur, intxt)
+      aString, cur = parseString(oxlt, cur+1, intxt)
       stateType = 'v'
     end #ifelseif
     
@@ -153,14 +149,25 @@ function parseObj(oxlt :: Openxlt, cur :: Int, intxt :: String) :: Tuple{Openxlt
     'o' => return aObj, cur
     'p' => return aPair, cur
     'a' => return aArray, cur
-    'v' => return String(aString), cur
+    'v' => return aString, cur
     _   => nothing
   end
    
 end #function
 
+function parseString(oxlt :: OpenXLT, cur :: Int, intxt :: String) :: Tuple{OpenXLT, Int}
+  theString = ""
+  while true
+    if intxt[cur] == '"'
+      break
+    end
+    theString *= intxt[cur]
+    cur += 1
+  end
+  return theString, cur
+end
 
-function parsePair(oxlt :: Openxlt, cur :: Int, intxt :: String) :: Tuple{Pair,Int}
+function parsePair(oxlt :: OpenXLT, cur :: Int, intxt :: String) :: Tuple{Pair,Int}
   stateIsKey = false
   stateIsVal = false
   while true
@@ -200,36 +207,17 @@ but in Julia an array of chars is not the same as a string
 So needs fixing
 
 """
-function parseArray(oxlt :: Openxlt, cur::Int, intxt::String) :: Tuple{Array,Int}
+function parseArray(oxlt :: OpenXLT, cur::Int, intxt::String) :: Tuple{Array,Int}
   statePass = true
   outArray = []
   while statePass
     if intxt[cur] == '('
       obj,cur = parseObj(oxlt,cur+1,intxt)
       append!(outArray, obj)
-      try #seems like a superfluous try block; probably needed for backtracking
-        if intxt[cur+1] != ','
-          break
-        end
-      catch e
-        break
-      end #try
-    elseif intxt[cur] == '"'
-      obj, cur = parseObj(cursor+1,intxt)
-      append!(outArray,obj)
-      try
-        if intxt[cur+1] != ','
-          break
-        end
-      catch
-        break
-      end #try
-    end #ifelseif
+    end #if
     cur += 1
-      #array of char not the same as a string
   end #while
-
-    return outArray, cur
+  return outArray, cur
 
 end #parseArray
 
@@ -242,8 +230,7 @@ not sure the return value yet
 """
 function parseValue(oxlt, cur::Int, intxt::String) :: Tuple{Any,Int}
   stateIsObj = false
-  #64 digit--supposed to be a 64bit value I think
-  val = "0000000000000000000000000000000000000000000000000000000000000000" #okay...
+  val = []
   valIdx = 1
   stateParen = false
   retObj = nothing
@@ -269,8 +256,7 @@ function parseValue(oxlt, cur::Int, intxt::String) :: Tuple{Any,Int}
         stateParen = !stateParen
       end #if
 
-      val[valIdx] = c
-      valIdx += 1
+      append!(val, c)
     end #ifelseif
 
     cur +=1
@@ -280,7 +266,7 @@ function parseValue(oxlt, cur::Int, intxt::String) :: Tuple{Any,Int}
   if stateIsObj
     retObj = val
   else
-    retObj = val[1:valIdx-1]
+    retObj = val
   end #if
 
   return retObj, cur
@@ -296,9 +282,11 @@ function parseMontageFromEEG(oxlt)
   #wait this is fucking stupid
   hh = transcode(UInt8, "ChanNames")
 
-  mtxt = split(oxlt.objectEEGMontage.mtxt, "0x")
+  oxlt.obj.objectEEGMontage.mtxt = split(oxlt.obj.objectEEGMontage.mtxt, "0x")
 
 end #parseMontageFromEEG
+
+
 
 function cleanKey(oxlt, key) :: String
   key = replace(key, ' ' => "")
@@ -351,10 +339,24 @@ function loadEEG(oxlt)
   ID_EEG = [-905246832,298899349,-1610599761,-1521198300,65539]
 
   fEEG = open(oxlt.nameFileEEG, 'r')
-  eegID = "Complete this"
-  
+  eegID = Int32.(read(fEEG, idBytes/intBytes))
+  if eegID != ID_EEG
+    println("file $(oxlt.nameFileEEG) doesn't have correct id")
+  end
+   
 
+  #TODO
 
 end #loadEEG
 
-end #module
+
+function carveF(indir, suffix)
+  d = readdir(indir, join=true)
+  files = filter(isfile, d)
+  return findall(x => endswith(x, uppercase(suffix)), files)
+end
+
+function checkFileExists(file, suffix)
+  isfile(file * suffix)
+end
+

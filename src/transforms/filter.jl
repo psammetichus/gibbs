@@ -20,9 +20,9 @@ function eegIirFilter(data :: Array{Float64,1}, bpass, Fs, order=2)
     return filt(zpg, data)
 end
 
-function eegIirFilter!(eeg :: EEG, bpass)
+function eegIirFilter!(eeg :: EEG, bpass, order=2)
     @threads for i in 1:signalCount(eeg)
-        eeg.signals[:,i] = eegIirFilter(eeg.signals[:,i], bpass, eeg.Fs, taps)
+        eeg.signals[:,i] = eegIirFilter(eeg.signals[:,i], bpass, eeg.Fs, order)
     end
 end
 

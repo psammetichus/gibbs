@@ -1,4 +1,4 @@
-# Copyright 2022–2024 Tyson Burghardt MD FAES
+# Copyright 2022–2025 Tyson Burghardt MD FAES
 # Released under GPLv3
 
 
@@ -24,6 +24,13 @@ using Base.Threads
 using Wavelets
 using EntropyHub
 using OrdinaryDiffEq
+using Random
+using Distributions
+using Match
+using Dates
+using SlurmClusterManager
+using Distributed
+
 
 @info "loading basic electrode data..."
 include("basics/electrodes.jl")
@@ -85,6 +92,12 @@ include("fileio/eegcsv.jl")
 export loadEEGFrameFromCSV, saveEEGFrameAsCSV
 
 #include("fooof/fooof.jl")
+#export FOOOF
+
+#include("microstate/microstate.jl")
+
+#include("dmf/fastmdf.jl")
+#export runDMF
 
 @info "loading DFA..."
 include("analysis/dfa.jl")

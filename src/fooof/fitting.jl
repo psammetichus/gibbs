@@ -5,41 +5,29 @@
 # aperiodic components" DOI 10.1038/s41593-020-00744-x
 #
 
+function multiGaussianFittingModel(xs :: Vector{Float64}, p)
+    #p is a vector of tuples
+    ys = zero(xs)
+    for i in length(p)/3
+        ys = ys .+ p[i+2].*exp.( -(xs .- p[i+0]).^2 ./ (2 .* p[i+1].^2))
+    end
+    return ys
+end #func
 
 function gaussianFittingModel(xs :: Vector{Float64}, p)
-    μ, height, wid = p
-    ys = zero(xs)
-    ys = ys .+ height*exp.( -(x - μ).^2 ./ (2wid^2))
-    return ys
+    μ, width, height = p
+    return height .* exp.( -(xs .- μ).^2 ./ (2width.^2))
+end
+
+function expoKneeFittingModel(xs :: Vector{Float64}, p)
+    offset, expnt, knee = p
+    return offset .- log10(knee .+ xs .^ expnt)
 end #func
-
-
-function expoFittingModel(xs :: Vector{Float64}, p)
-    offset, knee, expnt = p
-    ys = zero(xs)
-    ys = ys .+ (offset .- log10.(knee + xs.^expnt))
-    return ys
-end #func
-
 
 function expoNoKneeFittingModel(xs :: Vector{Float64}, p)
     offset, expnt = p
-    ys = zero(xs)
-    ys = ys .+ (offset .- log10.(xs.^expnt))
-    return ys
-end #func
+    return offset .- log10(xs .^ expnt)
+end
 
-function linearFittingModel(xs :: Vector{Float64}, p)
-    offset, slope = p
-    ys = zero(xs)
-    ys = ys .+ offset .+ (xs .* slope)
-    return ys
-end #func
 
-function quadraticFittingModel(xs :: Vector{Float64}, p)
-    offset, slope, curve = p
-    ys = zero(xs)
-    ys = ys .+ offset .+ (xs .* slope) + ( (xs.^2) .* curve)
-    return ys
-end #func
 

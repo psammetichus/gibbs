@@ -38,6 +38,6 @@ function f2(x1,x2)
 end #func
 
 function runEpileptor()
-    prob = ODEProblem(epileptor!, [0, -5, 0, 0, 3, 0], 10.0)
-    sol = solve(prob, Tsit5())
+    prob = SDEProblem(epileptor!, [0, -5, 0, 0, 3, 0], 10.0)
+    sol = solve(prob)
 end #func
