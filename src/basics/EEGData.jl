@@ -267,4 +267,4 @@ end #function
 function psd(data :: Vector{Float64})
   fourierData = rfft(data)
   return 2 .* abs.(fourierData) .^ 2 
-end #function psd
+end #function
