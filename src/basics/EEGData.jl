@@ -21,7 +21,7 @@ function EEG(signals, trodes, Fs, annots)
 end #function 
 
 "contains multiple segemnts of EEG data together with `offsets` in time between them"
-mutable struct EegGroup
+mutable struct EEGGroup
   eegs :: Vector{EEG}
   offsets :: Vector{Float64}
 end #struct
