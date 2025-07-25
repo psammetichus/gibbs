@@ -35,6 +35,17 @@ mutable struct AnnotationGroup
   len :: Int64
 end
 
+
+"builds an AnnotationGroup from a vector of Annotations"
+function AnnotationGroup(annotations :: Vector{Annotation})
+  l = length(annotations)
+  return AnnotationGroup([annotations[i].onset for i in 1:l],
+                          [annotations[i].duration for i in in 1:l],
+                          [annotations[i].name for i in 1:l],
+                          [annotations[i].desc for i in 1:l],
+                          l)
+end
+
 "adds an `Annotation` to an `AnnotationGroup`"
 function addAnnotation!(ag :: AnnotationGroup, ann :: Annotation)
   push!(ag.onsets, ann.onset)
@@ -103,6 +114,24 @@ end #function
 function signalCount(eeg :: EEG)
   return size(eeg.signals, 2)
 end #function
+
+"returns Annotations with onset in range (half-open)"
+function getAnnotationsByOnset(ag :: AnnotationGroup, onsetrange :: (Float64, Float64))
+  idxs = []
+  for i in length(ag.onsets)
+    if ag.onsets[i] < onsetrange[2] && ag.onsets[i] >= onsetrange[1] #half-open interval
+        push!(idxs, i)
+    end
+  end
+  return [getAnnotationByNum(idx) for idx in idxs]
+
+"splits an EEG object into two"
+function splitEEG(eeg :: EEG, startSamp :: Int64)
+  eeg1 = EEG(eeg.signals[1:startsamp-1], eeg.trodes, eeg.Fs, eeg.annots, startsamp-1)
+  eeg2 = EEG(eeg.signals[startsamp:end], eeg.trodes, eeg.Fs, eeg.annots, eeg.length - startsamp + 1)
+  return (eeg1, eeg2)
+end
+
 
 "retrieves a signal, represented as a vector of `Float64`, based on an electrode name"
 function getSignal(eeg :: EEG, trode :: String)
@@ -238,4 +267,4 @@ end #function
 function psd(data :: Vector{Float64})
   fourierData = rfft(data)
   return 2 .* abs.(fourierData) .^ 2 
-end #function psd
+end #function
