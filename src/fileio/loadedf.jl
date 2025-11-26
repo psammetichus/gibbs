@@ -9,12 +9,9 @@ const trodereplacements = Dict(
     "R EKG" => "ECGR",
     "R-EYE" => "EOGR",
     "L-EYE" => "EOGL",
-    "L EKG" => "ECGL",
-    "R EKG" => "ECGR",
     "T5" => "P7",
     "T6" => "P8"
 )
-
 
 
 function fixname!(signame :: String)
