@@ -40,8 +40,10 @@ function fitMultiGauss(data, Fs, p)
   return cfit(multiGaussianFittingModel, data, Fs, p)
 end
 
-function findFWHM(index)
-  #TODO
+function findFWHM(data, index)
+  indices, prominences = peakproms([index], data)
+  pkstats = peakwidths(indices, data, prominences) #default relheight is 0.5
+  return pkstats[2][1]
 end
 
 function estimateSD(fwhm)
