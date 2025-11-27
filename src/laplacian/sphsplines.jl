@@ -9,16 +9,32 @@ function gm(m :: Integer, N :: Integer, x :: Float64)
     (weights .* pls)/4π
 end
 
-function Vest(r :: Vector{Float64}, cnull :: Float64, 
-              c :: Vector{Float64}, electrodes :: Array{Float64,2},
-              m :: Integer, N :: Integer) :: Float64
-  cnull + sum( [c[i]*gm(m, N, r ⋅ electrodes[i]) for i = 1:length(electrodes)])
+function solveSphSplines(m :: Integer, N :: Integer, data :: Array{Float64}, trodes :: Array{Float64,2})
+    #data is Nchans x 1
+    chans = length(data)
+    A = zeros(chans+1,chans+1)
+    for i in 1:chans+1
+        A[i,1:chans] = [gm(m,N,cosdist(trodes[i,:],trodes[j,:])) for j in 1:chans] 
+    end
+    A[:,chans+1] = 1
+    A[end,1:chans] = 1
+    A[end,end] = 0
+    b = cat(data, 0; dims=1)
+    prob = LinearProblem(A, b)
+    sol = solve(prob)
+    return sol.u
 end
 
+function Vest(m, N, data, trodes)
+    #data is Nchans x Timepoints
+    coeffs = solveSphSplines(m,N,data,trodes)
+    Vest = zeros(chans)
+    for i in 1:chans
+        Vest[i] = coeffs[end] + [coeffs[j]*gm(m,N,cosdist(trodes[i],trodes[j])) for j in 1:chans]
+    end
+    return Vest
+end
 
-#from chapter 22 by John JB Allen 
-#https://jallen.faculty.arizona.edu/sites/jallen.faculty.arizona.edu/files/Chapter_22_Surface_Laplacian.pdf
-#
 
 function cosdist(i,j)
     xi,yi,zi = i
@@ -26,44 +42,3 @@ function cosdist(i,j)
     return 1 - ( (xi-xj)^2 + (yi-yj)^2 + (zi-zj)^2)/2
 end #function cosdist
 
-function gij(order, m, n, trodes)
-    l = length(trodes)
-    g = zeros( l,l)
-    fourpi = 4π^-1
-    for i in 1:l
-        for j in 1:l
-            for n = 1:order
-                g[i,j] += (2n + 1)*LP.Plm(cosdist(trodes[i],trodes[j], n, order))/(n*(n+1))^m
-            end
-            g[i,j] *= fourpi
-        end
-    end
-    return g
-end #gij
-
-function hij(order, m, n, trodes)
-    l = length(trodes)
-    h = zeros( l,l)
-    fourpi = 4π^-1
-    for i in 1:l
-        for j in 1:l
-            for n = 1:order
-                h[i,j] += -2*(n + 1)*LP.Plm(cosdist(trodes[i],trodes[j], n, order))/(n*(n+1))^(m-1)
-            end
-            h[i,j] *= fourpi
-        end
-    end
-    return h
-end #hij
-
-function lapl(i,t, data, λ=1e-5, G, H)
-    nelec = size(G)[1]
-    Gs = G + diagm(repeat([λ],nelec))
-    di = data[i,t]^-1 * Gs
-    Ci = zeros(nelec)
-    for j in 1:nelec
-       Ci += di
-
-       #TODO FINISH THIS CODE
-    end #for
-end #lapl

@@ -10,6 +10,7 @@ using FFTW
 using Diagonalizations
 using DataFrames
 using LinearAlgebra
+using LinearSolve
 using Statistics
 using Logging
 using EDFPlus
