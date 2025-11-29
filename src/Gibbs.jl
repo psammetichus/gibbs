@@ -3,35 +3,37 @@
 
 module Gibbs
 
-@info "starting module loading"
+@info "starting module imports..."
 
-using DSP
-using FFTW
-using Diagonalizations
-using DataFrames
-using LinearAlgebra
-using LinearSolve
-using Statistics
-using Logging
-using EDFPlus
-using JLD
-using Peaks
 using BasicInterpolators
 using CSV
-using StatsBase
-using LsqFit
+using DataFrames
+using Dates
+using Diagonalizations
+using Distributed
+using Distributions
+using DSP
+using EDFPlus
+using EntropyHub
+using FFTW
 using GLM
+using JLD
+using LegendrePolynomials
+using LinearAlgebra
+using LinearSolve
+using Logging
+using LsqFit
+using Match
+using OrdinaryDiffEq
+using Peaks
+using Random
+using SlurmClusterManager
+using Statistics
+using StatsBase
 using Base.Threads
 using Wavelets
-using EntropyHub
-using OrdinaryDiffEq
-using Random
-using Distributions
-using Match
-using Dates
-using SlurmClusterManager
-using Distributed
-using LegendrePolynomials
+
+@info "...module imports finished"
 
 @info "loading basic electrode data..."
 include("basics/electrodes.jl")
