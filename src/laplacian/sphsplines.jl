@@ -1,20 +1,31 @@
-import LegendrePolynomials as LP
-using LinearAlgebra
-
-# from "Spherical Splines and Average Referencing in Scalp Electroencephalography" 10.1007/s10548-006-0011-0
+# from "The surface Laplacian technique in EEG: Theory and methods" 10.1016/j.ijpsycho.2015.04.023
+#
+# TODO: add regularization
 
 function gm(m :: Integer, N :: Integer, x :: Float64)
     weights = [(2n + 1)/(n*(n+1))^m for n = 1:N]
-    pls = LP.collectPl(x,N)[2:end]
+    pls = collectPl(x,N)[2:end]
     (weights .* pls)/4π
 end
 
-function solveSphSplines(m :: Integer, N :: Integer, data :: Array{Float64}, trodes :: Array{Float64,2})
+function precompute_Gmij(m :: Integer, N :: Integer, l :: Integer, 
+                        trodes :: Array{Float64,2})
+    Gmij = zeros(l,l)
+    for i in 1:l
+      for j in 1:l
+        Gmij[i,j] = gm(m,N,cosdist(trodes[i,:],trodes[j,:]))
+      end
+    end
+    return Gmij
+end
+    
+function solveSphSplines( data :: Array{Float64}, trodes :: Array{Float64,2};
+    m :: Integer = 3, N :: Integer = 64, Gmij :: Array{Float64,2})
     #data is Nchans x 1
     chans = length(data)
     A = zeros(chans+1,chans+1)
-    for i in 1:chans+1
-        A[i,1:chans] = [gm(m,N,cosdist(trodes[i,:],trodes[j,:])) for j in 1:chans] 
+    for i in 1:chans
+        A[i,1:chans] = [Gmij for j in 1:chans]
     end
     A[:,chans+1] = 1
     A[end,1:chans] = 1
@@ -25,20 +36,23 @@ function solveSphSplines(m :: Integer, N :: Integer, data :: Array{Float64}, tro
     return sol.u
 end
 
-function Vest(m, N, data, trodes)
+function Vest(data, trodes, Gmij; m = 3, N = 64)
     #data is Nchans x Timepoints
-    coeffs = solveSphSplines(m,N,data,trodes)
-    Vest = zeros(chans)
-    for i in 1:chans
-        Vest[i] = coeffs[end] + [coeffs[j]*gm(m,N,cosdist(trodes[i],trodes[j])) for j in 1:chans]
+    chans,T = length(data)
+    Gmij = precompute_Gmij(m,N,chans,trodes)
+    Vest = zeros(chans,T)
+    for t in 1:T
+      coeffs = solveSphSplines(m,N,data,trodes)
+      for i in 1:chans
+        Vest[i,t] = coeffs[end] + [coeffs[j]*Gmij[i,j] for j in 1:chans]
+      end
     end
     return Vest
 end
 
-
-function cosdist(i,j)
+function cosdist(i :: Real, j :: Real)
     xi,yi,zi = i
     xj,yj,zj = j
     return 1 - ( (xi-xj)^2 + (yi-yj)^2 + (zi-zj)^2)/2
-end #function cosdist
+end 
 

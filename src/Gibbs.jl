@@ -4,7 +4,6 @@
 
 module Gibbs
 
-
 using DSP
 using FFTW
 using Diagonalizations
@@ -31,7 +30,7 @@ using Match
 using Dates
 using SlurmClusterManager
 using Distributed
-
+using LegendrePolynomials
 
 @info "loading basic electrode data..."
 include("basics/electrodes.jl")
@@ -92,8 +91,8 @@ export emd, hilbertHuang
 include("fileio/eegcsv.jl")
 export loadEEGFrameFromCSV, saveEEGFrameAsCSV
 
-#include("fooof/fooof.jl")
-#export FOOOF
+include("fooof/fooof.jl")
+export FOOOF
 
 #include("microstate/microstate.jl")
 
@@ -111,5 +110,9 @@ export hjorthActivity, hjorthMobility, hjorthComplexity
 @info "loading Epileptor model..."
 include("models/epileptor.jl")
 export runEpileptor
+
+@info "loading surface Laplacian by spherical splines"
+include("laplacian/sphsplines.jl")
+export Vest
 
 end #module
