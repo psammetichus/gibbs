@@ -1,8 +1,9 @@
 # Copyright 2022–2025 Tyson Burghardt MD FAES
 # Released under GPLv3
 
-
 module Gibbs
+
+@info "starting module loading"
 
 using DSP
 using FFTW
