@@ -9,7 +9,7 @@
 # think about how to fine-tune our guesses; massaging curve_fit seems to be the most difficult thing here
 #
 
-include("fooof/fitting.jl")
+include("fitting.jl")
 
 function freq_range(dataLength, Fs)
   range(1.0, step=Fs/2dataLength, length=dataLength)
