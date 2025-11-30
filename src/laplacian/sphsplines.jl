@@ -34,7 +34,7 @@ function laplacianTransformMatrix(m,n,λ,trodes)
   return Kbar * Cλ
 end
 
-functional laplacianSphSpl(m,n,λ,eegdata :: EEG, trodes)
+function laplacianSphSpl(m,n,λ,eegdata :: EEG, trodes)
   data = eegdata.signals
   LTM = laplacianTransformMatrix(m,n,λ,trodes)
   return LTM*data'
