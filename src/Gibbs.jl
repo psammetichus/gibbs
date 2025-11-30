@@ -116,6 +116,6 @@ export runEpileptor
 
 @info "loading surface Laplacian by spherical splines"
 include("laplacian/sphsplines.jl")
-export Vest
+export laplacianSphSpl
 
 end #module

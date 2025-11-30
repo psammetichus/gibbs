@@ -8,7 +8,7 @@ function gm(m :: Integer, N :: Integer, x :: Float64)
     (weights .* pls)/4π
 end
 
-function precompute_Gmij(m :: Integer, N :: Integer, l :: Integer, 
+function Gmij(m :: Integer, N :: Integer, l :: Integer, 
                         trodes :: Array{Float64,2})
     Gmij = zeros(l,l)
     for i in 1:l
@@ -19,6 +19,27 @@ function precompute_Gmij(m :: Integer, N :: Integer, l :: Integer,
     return Gmij
 end
     
+function laplacianTransformMatrix(m,n,λ,trodes)
+  chans,_ = length(trodes)
+  K = zeros(chans,chans)
+  for i in 1:chans
+    K[i,:] = [abs(trodes[j,:] .- trodes[i,:])^(2m-3) for j in 1:chans]
+  end
+  gm = Gmij(m,n,chans,trodes)
+  Kbar = zeros(chans,chans)
+  Kbar = -gm
+  qrsol = qr(ones(chans))
+  Q2 = qrsol.Q[:,2:end]
+  Cλ = Q2*inv(Q2'*(K+ n*λ*I)*Q2)*Q2'
+  return Kbar * Cλ
+end
+
+functional laplacianSphSpl(m,n,λ,eegdata :: EEG, trodes)
+  data = eegdata.signals
+  LTM = laplacianTransformMatrix(m,n,λ,trodes)
+  return LTM*data'
+end
+
 function solveSphSplines( data :: Array{Float64}, trodes :: Array{Float64,2};
     m :: Integer = 3, N :: Integer = 64, Gmij :: Array{Float64,2})
     #data is Nchans x 1
