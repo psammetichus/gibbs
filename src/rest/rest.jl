@@ -1,11 +1,3 @@
-module REST
-
-import LinearAlgebra
-using Statistics
-using LegendrePolynomials
-using LinearAlgebra
-using Statistics
-using CSV
 
 include("3000dipoles.jl")
 
@@ -108,7 +100,3 @@ function genlmd(np)
     return exp10.(range(2,3,np))'
 
 end
-
-end #module
-
-
