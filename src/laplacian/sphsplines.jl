@@ -20,7 +20,7 @@ function Gmij(m :: Integer, N :: Integer, l :: Integer,
 end
     
 function laplacianTransformMatrix(m,n,λ,trodes)
-  chans,_ = length(trodes)
+  chans,_ = size(trodes)
   K = zeros(chans,chans)
   for i in 1:chans
     K[i,:] = [abs(trodes[j,:] .- trodes[i,:])^(2m-3) for j in 1:chans]
@@ -43,7 +43,7 @@ end
 function solveSphSplines( data :: Array{Float64}, trodes :: Array{Float64,2};
     m :: Integer = 3, N :: Integer = 64, Gmij :: Array{Float64,2})
     #data is Nchans x 1
-    chans = length(data)
+    chans = size(data)
     A = zeros(chans+1,chans+1)
     for i in 1:chans
         A[i,1:chans] = [Gmij for j in 1:chans]
@@ -59,7 +59,7 @@ end
 
 function Vest(data, trodes, Gmij; m = 3, N = 64)
     #data is Nchans x Timepoints
-    chans,T = length(data)
+    chans,T = size(data)
     Gmij = precompute_Gmij(m,N,chans,trodes)
     Vest = zeros(chans,T)
     for t in 1:T
