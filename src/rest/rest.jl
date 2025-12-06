@@ -18,9 +18,9 @@ function genD(H)
     #plug it into the terms in the misfit function || v - H*ϕ ||²
 
     U,S,V = svd(H*H')
-    d = diag(s)
+    d = diag(S)
     for (i,k) in enumerate(d)
-        if k != 0.0
+        if k ≠ 0.0
             d[i] = 1/√k
         end
     end

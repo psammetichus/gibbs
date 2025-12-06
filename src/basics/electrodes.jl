@@ -86,7 +86,7 @@ const ifcn_electrodes = [
        Electrode("O2", 	(tenUp,		+180 - tenpctDeg))
 	]
        
-  const tentwenty_electrodes = [
+const tentwenty_electrodes = [
     Electrode("Cz", 	(0,		0)),
     Electrode("Nz", 	(+90,		0)),
     Electrode("In", 	(+90,		+180)),
