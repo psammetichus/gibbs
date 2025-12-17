@@ -30,6 +30,7 @@ using Random
 using SlurmClusterManager
 using Statistics
 using StatsBase
+using Test
 using Base.Threads
 using Wavelets
 
