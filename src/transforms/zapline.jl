@@ -6,39 +6,67 @@
 #de Cheveigne, A. (2020) ZapLine: a simple and effective method to remove power line artifacts.
 #NeuroImage, 1, 1-13. https://doi.org/10.1016/j.neuroimage.2019.116356
 
+#And the zapline matlab algorithm found at http://audition.ens.fr/adc/NoiseTools/src/NoiseTools/doc/NoiseTools/nt_zapline.html
 
 
-function zaplineCleanData(data, Fs; kwargs...)
-    
+
+
+function zaplineCleanData(data, Fs, fline, nremove; kwargs...)
+    #fline is normalized to Fs
     #warn that high sampling rates can affect results
     if Fs > 500
         @warn "It is recommended to downsample to 250–500 Hz or results may be suboptimal."
     end
 
-    nkeep = 0   
-
-    winSizeCompleteSpectrum = 2.0
     
-    if haskey(kwargs, :nkeep)
-        if kwargs[:nkeep] == 0
-            nkeep = size(data, 2)
-        end
-    else
+    nkeep = getkey(kwargs, :nkeep, size(data,2))
+    nfft = getkey(kwargs, :nfft, 512)
+    nIters = getkey(kwargs, :niters, 1)
+       
+    #convolve with square window
+    xx = zaplineSmooth(x,1/fline,nIters) #cancels line freq and harmonics, light lowpass
+    xxxx = zaplinePCA(x - xx, [], nkeep)
     
-    #can remove flat (ie, 0.0) channels here
-
-    #compute initial spectrum
-    initPSD = welch_pgram(data, winSizeCompleteSpectrum*Fs, Fs, hanning)
-    initPSDLog = 10 .* log10.(initPSD)
-
-    map(x -> (x > 49 && x < 51) || (x > 59 && x < 61), initPSDLog.freq)
-    spectraChunkAllChans = initPSDLog.power[idx,:]
-
-    maxPower = maximum(spectraChunkAllChans)
-
-    
-    end
-
-
 
 end #function zaplineCleanData
+
+function zaplinePCA(x, shifts=[0], nkeep=[], threshold=[], w=[])
+    #todo
+end #function zaplinePCA
+
+function zaplineSmooth(x, T, nIters=1, noDelayFlag=false)
+    integ = floor(T)
+    frac = T - integ
+
+    if integ > size(x, 1)
+        x = repeat(mean(x), size(x,1), 1, 1, 1)
+        return x
+    end
+
+    #remove onset step
+    mn = mean(x[1:integ+1,:,:],1)
+    x = x - mn
+
+    if nIters == 1 && frac == 0
+        #faster
+        x = cumsum(x)
+        x[T+1:end,:] = x[T+1:end,:] - x[1:end-T,:]
+        x = x/T
+    else
+        #filter kernel
+        B = [ones(integ,1); frac]/T
+        for k ∈ 1:nIters-1
+            B = conv(B, [ones(integ,1);frac]/T)
+        end
+        x = filt(B,1,x)
+    end
+    
+    if noDelayFlag
+        shift = round(T/2*nIters)
+        x = [x[shift+1:end,:,:,:]; zeros(shift,size(x,2),size(x,3),size(x,4))]
+    end
+
+    #restore DC
+    x = x + mn
+    return x
+end
