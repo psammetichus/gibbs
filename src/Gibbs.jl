@@ -99,8 +99,11 @@ export FOOOF
 
 #include("microstate/microstate.jl")
 
-#include("dmf/fastmdf.jl")
+#include("dmf/fastdmf.jl")
 #export runDMF
+
+#include("transforms/zapline.jl")
+#export zaplineCleanData
 
 @info "loading DFA..."
 include("analysis/dfa.jl")

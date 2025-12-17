@@ -1,5 +1,3 @@
-module RUNICA
-
 function runica(data :: Matrix{Float64}; kwargs...)
     chans, frames = size(data)
     urchans = chans
@@ -48,5 +46,3 @@ function runica(data :: Matrix{Float64}; kwargs...)
     pcaflag = "completeme"
     
 end #function
-
-end #module

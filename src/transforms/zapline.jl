@@ -1,8 +1,3 @@
-module EEGFilter
-
-using Logging
-using DSP
-
 #Zapline line noise cleaning algorithm based on https://github.com/MariusKlug/zapline-plus and the following papers:
 
 #Klug, M., & Kloosterman, N. A. (2022).Zapline-plus: A Zapline extension for automatic and adaptive removal of frequency-specific noise artifacts in M/EEG.
@@ -47,6 +42,3 @@ function zaplineCleanData(data, Fs; kwargs...)
 
 
 end #function zaplineCleanData
-
-
-end #module
