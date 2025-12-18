@@ -1,5 +1,3 @@
-using StatsBase
-
 function zeroExtend(arr, i, l, segLength)
     if l-i+1 > segLength
         return arr[i:i+segLength]
