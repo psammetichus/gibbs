@@ -45,9 +45,9 @@ end #function zaplinePCA
 
 function zaplineCov(x, shifts, w) #for 2D matrices x
     nshifts = prod(size(shifts))
-    xSizes = size(x)
-    xDim = length(xSizes)
-    c = zeros(xSizes[2]*nshifts)
+    xSize = size(x)
+    xDim = ndims(x)
+    c = zeros(xSize[2]*nshifts)
     if isempty(w)
         xx = zaplineMultishift(x, shifts)
         c = c + xx' * xx
