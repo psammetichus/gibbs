@@ -4,8 +4,6 @@ include("3000dipoles.jl")
 # data is the EEG potentials with average reference, chan x samples
 # G is the lead field matrix, sources x channels
 
-const RMat = Array{Float64, 2}
-
 function rREST_Hsc(n, indices)
     f = zeros(n,1)
     f[indices] .= 1
@@ -68,10 +66,10 @@ function rREST_core(data, K)
 
 end
 
-function calcTransformMatrix(V :: Rmat, est)
+function calcTransformMatrix(V :: Matrix{Float64}, est)
 end
 
-function invertG(G :: Rmat)
+function invertG(G :: Matrix{Float64})
 end
 
 function calcRef(V, G)

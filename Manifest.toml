@@ -2,7 +2,7 @@
 
 julia_version = "1.12.3"
 manifest_format = "2.0"
-project_hash = "4228a38bf495d3a55576acbc04850af91efa807b"
+project_hash = "8716da2af91c19b1cbb6e23ee8d291eee681ee6e"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "8b2b045b22740e4be20654175cc38291d48539db"
@@ -352,6 +352,11 @@ version = "0.3.1"
 git-tree-sha1 = "249fe38abf76d48563e2f4556bebd215aa317e15"
 uuid = "a8cc5b0e-0ffa-5ad4-8c14-923d3ee1735f"
 version = "4.1.1"
+
+[[deps.DBInterface]]
+git-tree-sha1 = "a444404b3f94deaa43ca2a58e18153a82695282b"
+uuid = "a10d1c49-ce27-4219-8d33-6db1a4562965"
+version = "2.6.1"
 
 [[deps.DSP]]
 deps = ["FFTW", "IterTools", "LinearAlgebra", "Polynomials", "Random", "Reexport", "SpecialFunctions", "Statistics"]
@@ -858,7 +863,7 @@ uuid = "61579ee1-b43e-5ca0-a5da-69d92c66a64b"
 version = "9.55.1+0"
 
 [[deps.Gibbs]]
-deps = ["BasicInterpolators", "CSV", "DSP", "DataFrames", "Dates", "Diagonalizations", "Distributed", "Distributions", "EDFPlus", "EntropyHub", "FFTW", "GLM", "JLD", "LegendrePolynomials", "LinearAlgebra", "LinearSolve", "Logging", "LsqFit", "Match", "OrdinaryDiffEq", "Peaks", "Random", "SlurmClusterManager", "Statistics", "StatsBase", "Wavelets"]
+deps = ["BasicInterpolators", "CSV", "DSP", "DataFrames", "Dates", "Diagonalizations", "Distributed", "Distributions", "EDFPlus", "EntropyHub", "FFTW", "GLM", "JLD", "LegendrePolynomials", "LinearAlgebra", "LinearSolve", "Logging", "LsqFit", "Match", "OrdinaryDiffEq", "Peaks", "Random", "SlurmClusterManager", "Statistics", "StatsBase", "Test", "Wavelets"]
 path = "."
 uuid = "c362587e-f337-4b36-af83-51aad0999083"
 version = "0.1.0"
@@ -2160,6 +2165,18 @@ deps = ["IfElse", "Static", "VectorizationBase"]
 git-tree-sha1 = "456f610ca2fbd1c14f5fcf31c6bfadc55e7d66e0"
 uuid = "476501e8-09a2-5ece-8869-fb82de89a1fa"
 version = "0.6.43"
+
+[[deps.SQLite]]
+deps = ["DBInterface", "Random", "SQLite_jll", "Serialization", "Tables", "WeakRefStrings"]
+git-tree-sha1 = "38b82dbc52b7db40bea182688c7a1103d06948a4"
+uuid = "0aa819cd-b072-5ff4-a722-6bc24af294d9"
+version = "1.6.1"
+
+[[deps.SQLite_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
+git-tree-sha1 = "9a325057cdb9b066f1f96dc77218df60fe3007cb"
+uuid = "76ed43ae-9a5d-5a62-8c75-30186b810ce8"
+version = "3.48.0+0"
 
 [[deps.SciMLBase]]
 deps = ["ADTypes", "Accessors", "ArrayInterface", "CommonSolve", "ConstructionBase", "Distributed", "DocStringExtensions", "EnumX", "FunctionWrappersWrappers", "IteratorInterfaceExtensions", "LinearAlgebra", "Logging", "Markdown", "Moshi", "PrecompileTools", "Preferences", "Printf", "RecipesBase", "RecursiveArrayTools", "Reexport", "RuntimeGeneratedFunctions", "SciMLOperators", "SciMLStructures", "StaticArraysCore", "Statistics", "SymbolicIndexingInterface"]

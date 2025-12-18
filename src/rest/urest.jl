@@ -1,7 +1,6 @@
 #adapted from https://github.com/ShiangHu/Unified-EEG-reference-rREST
-const RMat = Array{Float64, 2}
 
-function rRestCore(data :: RMat, K :: Rmat) :: (RMat, RMat, Rmat, RMat, Float64)
+function rRestCore(data :: Matrix{Float64}, K :: Matrix{Float64}) :: (Matrix{Float64}, Matrix{Float64}, Matrix{Float64}, Matrix{Float64}, Float64)
 
   Nc, Nt = size(data)
   dataR, H, L = rRestVrbTrans(data, K)

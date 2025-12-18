@@ -1,5 +1,3 @@
-using SQLite
-
 function openEEGSQLite(filename :: String)
     if !isfile(filename)
         prepareStmts = read("eegfile.sql")    
