@@ -60,7 +60,7 @@ function zaplineCov(x, shifts, w) #for 2D matrices x
 end #function zaplineCov
 
 function zaplineMultishift(x, shifts)
-    
+end
 
 function zaplineSmoothe(x, T, nIters=1, noDelayFlag=false)
     integ = floor(T)
