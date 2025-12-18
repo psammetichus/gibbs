@@ -7,6 +7,7 @@
 #NeuroImage, 1, 1-13. https://doi.org/10.1016/j.neuroimage.2019.116356
 
 #And the zapline matlab algorithm found at http://audition.ens.fr/adc/NoiseTools/src/NoiseTools/doc/NoiseTools/nt_zapline.html
+#NoiseTools is not well-commented. It appears they expect data matrix as time x channels or time x channels x trials
 
 
 
@@ -24,17 +25,44 @@ function zaplineCleanData(data, Fs, fline, nremove; kwargs...)
     nIters = getkey(kwargs, :niters, 1)
        
     #convolve with square window
-    xx = zaplineSmooth(x,1/fline,nIters) #cancels line freq and harmonics, light lowpass
+    xx = zaplineSmoothe(x,1/fline,nIters) #cancels line freq and harmonics, light lowpass
     xxxx = zaplinePCA(x - xx, [], nkeep)
     
 
 end #function zaplineCleanData
 
 function zaplinePCA(x, shifts=[0], nkeep=[], threshold=[], w=[])
-    #todo
+    m,n = size(x)
+    o = 1
+
+    offset = max(0, -min(shifts))
+    shifts += offset                 # adjust shifts to make them nonnegative
+    idx = offset + (1:m-max(shifts)) # x[idx] maps to z
+    c = zaplineCov(x,shifts,w)
+    #TODO FINISH
+
 end #function zaplinePCA
 
-function zaplineSmooth(x, T, nIters=1, noDelayFlag=false)
+function zaplineCov(x, shifts, w) #for 2D matrices x
+    nshifts = prod(size(shifts))
+    xSizes = size(x)
+    xDim = length(xSizes)
+    c = zeros(xSizes[2]*nshifts)
+    if isempty(w)
+        xx = zaplineMultishift(x, shifts)
+        c = c + xx' * xx
+        tw = size(xx,1)
+        return c, tw
+    else
+        #TODO
+
+    end #if
+end #function zaplineCov
+
+function zaplineMultishift(x, shifts)
+    
+
+function zaplineSmoothe(x, T, nIters=1, noDelayFlag=false)
     integ = floor(T)
     frac = T - integ
 
@@ -54,11 +82,12 @@ function zaplineSmooth(x, T, nIters=1, noDelayFlag=false)
         x = x/T
     else
         #filter kernel
-        B = [ones(integ,1); frac]/T
+        scaledOnes = [ones(integ,1); frac]/T
+        B = scaledOnes
         for k ∈ 1:nIters-1
-            B = conv(B, [ones(integ,1);frac]/T)
+            B = conv(B, scaledOnes)
         end
-        x = filt(B,1,x)
+        x = filt(B[:,1],1,x)
     end
     
     if noDelayFlag
