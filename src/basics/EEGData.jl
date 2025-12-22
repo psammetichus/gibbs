@@ -9,7 +9,7 @@ end #Annotation struct
 "main struct of EEG data"
 mutable struct EEG
   signals :: Array{Float64,2} #nsamples × mchans
-  trodes :: Array{String} #m chans
+  trodes :: Vector{String} #m chans
   Fs :: Float64
   annots :: Vector{Annotation}
   length :: Int64

@@ -38,7 +38,7 @@ function getAnnotationsByRecord(db :: SQLite.DB, recID :: Int)
         recID = ?;""", [recID])
 end #function
 
-function saveEEGToSQL(eeg, db, trodes, subj :: Subject)
+function saveEEGToSQL(eeg, db, subj :: Subject)
     chunkSize = 2^9
     l = eeg.length
     #not sure how to get the autoincremented ID
@@ -50,8 +50,8 @@ function saveEEGToSQL(eeg, db, trodes, subj :: Subject)
     recID = newRecord[1]
     DBInterface.execute(db,
     """insert into RecordXSubject(subj, record) values(?,?);""", (subjID, recID))
-    for (trode, data) ∈ eeg.signals
-        trodeID = trodes[trode]
+    for j ∈ 1:signalCount(eeg)
+        trodeID = j
         for i ∈ 1:chunkSize:l  
             DBInterface.execute(db, 
             """insert into Chunks(record, trodeID, offset, blobSamples, signaldata
