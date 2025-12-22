@@ -68,6 +68,10 @@ export saveAsJLD, loadJLD
 include("fileio/loadedf.jl")
 export loadEEGFromEDF, convertDirectory!
 
+@info "loading IO for SQLite files..."
+include("fileio/eegsqlite.jl")
+export openEEGSQLite, getSubjects, getRecordsBySubject, getTrodeID, getChunksFromTrode, getAnnotationsByRecord, saveEEGToSQL
+
 @info "loading exporter for BacAv..."
 include("fileio/bacav.jl")
 export exportBacAv

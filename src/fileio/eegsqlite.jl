@@ -1,8 +1,9 @@
+include("eegsqlitefile.jl")
+
 function openEEGSQLite(filename :: String)
     if !isfile(filename)
-        prepareStmts = read("eegfile.sql")    
         db = SQLite.DB(filename)
-        DBInterface.execute(db, prepareStmts, [])
+        DBInterface.execute(db, eegsqliteschema, [])
         return db
     else
         db = SQLite.DB(filename)
@@ -20,7 +21,7 @@ function getRecordsBySubject(db :: SQLite.DB, subjID :: Int)
         RecordXSubject.subj = ?;""", [subjID])
 end #function
 
-function getTrodeID(db :: SQLite.DB, trodeNames :: [String])
+function getTrodeID(db :: SQLite.DB, trodeNames)
     return DBInterface.execute(db,
     """select trodeName, trodeID from Electrodes where trodeName = ?;""", trodeNames)
 end #function

@@ -1,4 +1,4 @@
-create table Chunks (
+eegsqliteschema = """create table Chunks (
       chunkid integer primary key autoincrement,
       record integer references RecordData(recordId) on delete cascade,
       trodeID integer,
@@ -38,4 +38,4 @@ create table Annotations (
       name text,
       desc text,
       annType text
-);
+);"""
