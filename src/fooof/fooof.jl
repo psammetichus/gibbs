@@ -17,12 +17,16 @@ end
 
 function cfit(model, data, Fs, p)
   ll = length(data)
-  LsqFit.curve_fit(model, freq_range(ll, Fs), data, p)
+  u0 = p
+  prob = NonlinearCurveFitProblem(ScalarModel(model, u0, freq_range(ll, Fs), data))
+  alg = LevenbergMarquardt()
+  return solve(prob, alg)
+  #LsqFit.curve_fit(model, freq_range(ll, Fs), data, p)
 end
 
 function fitOOF(data :: Vector{Float64}, Fs :: Float64, offset0, expnt0, knee=false)
   if knee
-    p = [offset expnt]
+    p = [offset0 expnt0]
     fit = cfit(expoKneeFittingModel, data, Fs, p)
   else
     p = [offset expnt knee]
@@ -81,7 +85,7 @@ function FOOOF(data :: Vector{Float64}, Fs :: Float64, kneeMode=false)
   else
     initOOFFit = fitOOF(psdData, Fs, false)
   end
-  offset, expnt = initOOFFit.param
+  offset, expnt = initOOFFit.u
 
 
   #iterate fitting Gaussians
@@ -94,8 +98,8 @@ function FOOOF(data :: Vector{Float64}, Fs :: Float64, kneeMode=false)
   while flag
     flag = false
     estSD = findFWHM(peakInd) |> estimateSD
-    aGaussFit = fitGauss(initOOFFit.residuals, Fs, peakInd/Fs, estSD, peakAmp)
-    push!(gaussians, aGaussFit.param...)
+    aGaussFit = fitGauss(initOOFFit.resid, Fs, peakInd/Fs, estSD, peakAmp)
+    push!(gaussians, aGaussFit.u...)
     peakInd, peakAmp = findBiggestPeak(aGaussFit.residuals)
     if aboveNoiseFloor(peakAmp, data, threshold)
       flag = true
@@ -103,13 +107,13 @@ function FOOOF(data :: Vector{Float64}, Fs :: Float64, kneeMode=false)
   end
   
   #now fit a multigaussian and 
-  multiGaussFit = fitMultiGauss(initOOFFit.residuals, Fs, gaussians)
+  multiGaussFit = fitMultiGauss(initOOFFit.resid, Fs, gaussians)
   
   #subtract multigaussians and do final OOF fit (does it need to have a knee?) using initial fit params as guesses
-  newData = psdData .- multiGaussianFittingModel(freq_range(length(psdData), Fs), multiGaussFit.param) #are the params a vector of tuples?
+  newData = psdData .- multiGaussianFittingModel(freq_range(length(psdData), Fs), multiGaussFit.u) #are the params a vector of tuples?
   finalFit = fitOOF(newData, Fs, offset, expnt, false)
   
-  finalData = newData .- expoNoKneeFittingModel(freq_range(length(newData), Fs), finalFit.param)
+  finalData = newData .- expoNoKneeFittingModel(freq_range(length(newData), Fs), finalFit.u)
   return 10 .^ finalData #convert back to linear space
 end #function FOOOF
 

@@ -7,6 +7,7 @@ module Gibbs
 
 using BasicInterpolators
 using CSV
+using CurveFit
 using DataFrames
 using Dates
 using Diagonalizations
@@ -23,7 +24,6 @@ using LegendrePolynomials
 using LinearAlgebra
 using LinearSolve
 using Logging
-using LsqFit
 using Match
 using OrdinaryDiffEq
 using Peaks
