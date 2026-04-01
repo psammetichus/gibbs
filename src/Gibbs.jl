@@ -18,7 +18,6 @@ using EDFPlus
 using EntropyHub
 using FFTW
 using GLM
-using Hilbert
 using JLD
 using LegendrePolynomials
 using LinearAlgebra
