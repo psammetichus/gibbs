@@ -250,3 +250,14 @@ function psd(data :: Vector{Float64})
   fourierData = rfft(data)
   return 2 .* abs.(fourierData) .^ 2 
 end #function psd
+
+function clip(data :: Vector{Float64}, threshold)
+    for i in 1:length(data)
+        if abs(data[i]) > threshold
+            data[i] = sign(data[i]) * threshold
+        end
+    end
+    return data
+end
+
+
