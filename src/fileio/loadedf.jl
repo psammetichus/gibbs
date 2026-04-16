@@ -13,6 +13,7 @@ const trodereplacements = Dict(
     "T6" => "P8"
 )
 
+rejectTrodes = [  "Fpz" ]
 
 function fixname!(signame :: String)
     stripped = strip(signame)
@@ -25,13 +26,17 @@ end #fixname!
 function loadEEGFromEDF(filename :: String)
     edfh = EDFPlus.loadfile(filename)
     signalchannels = []
-	names = []
-	for (i, chan) in enumerate(edfh.signalparam)
-		if !chan.annotation   
-			push!(signalchannels, i)
-			push!(names, fixname!(edfh.signalparam[i].label))
-		end #if
-	end #for
+    names = []
+    for (i, chan) in enumerate(edfh.signalparam)
+        if !chan.annotation   
+            push!(signalchannels, i)
+            fname = fixname!(edfh.signalparam[i].label)
+            if fname ∈ rejectTrodes
+                break
+            end #if
+            push!(names, fname)
+        end #if
+    end #for
     l = length(signalchannels)
     Fs = EDFPlus.samplerate(edfh, signalchannels[1]) 
     signals = zeros(Int64(ceil(Fs*edfh.datarecords*edfh.datarecord_duration)),l)
