@@ -8,7 +8,7 @@ end #Annotation struct
   
 "main struct of EEG data"
 mutable struct EEG
-  signals :: Array{Float64,2} #nsamples × mchans
+  signals :: Matrix{Float64} #nsamples × mchans
   trodes :: Vector{String} #m chans
   Fs :: Float64
   annots :: Vector{Annotation}
@@ -20,7 +20,7 @@ function EEG(signals, trodes, Fs, annots)
 	EEG(signals, trodes, Fs, annots, size(signals)[1])
 end #function 
 
-"contains multiple segemnts of EEG data together with `offsets` in time between them"
+"contains multiple segments of EEG data together with `offsets` in time between them"
 mutable struct EEGGroup
   eegs :: Vector{EEG}
   offsets :: Vector{Float64}
