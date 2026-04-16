@@ -19,13 +19,7 @@ function eegSegment(data :: Array{Float64,1}, segLength = 1024, overlap=0)
 end #function
 
 function eegFilter(eeg :: EEG, Fs, bp=(1.0,70.0), notch=false)
-    filtered = eegFirFilter!(data, bp)
-    #now clean with SOBI
-    dataMatrix = eeg.signals
-    A,S = sobi(dataMatrix)
-    for i in 1:size(dataMatrix,1)
-        dataMatrix[i,:] = dataMatrix[i,:] - S[1,:]
-    end #for
+    eegFirFilter!(data, bp)
 end #function
 
 function eegStandardize!(eeg :: EEG)
